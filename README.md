@@ -1,3 +1,23 @@
-# `react-app-template`
+# `kanda-weather`
 
-This is my React App Template.
+Weather dashboard for the Kanda Hackathon.
+
+## Usage
+
+To build into the `dist/` directory, run:
+
+```sh
+npm run build
+```
+
+To start the server, run:
+
+```sh
+npm run start
+```
+
+To start a development enviornment, run:
+
+```sh
+npm run dev
+```

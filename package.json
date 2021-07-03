@@ -1,7 +1,7 @@
 {
-  "name": "",
+  "name": "kanda-weather",
   "version": "1.0.0",
-  "description": "",
+  "description": "Weather dashboard for West Africa",
   "main": "index.js",
   "keywords": [],
   "author": "Yash Singh",
