@@ -149,3 +149,7 @@ body.dark #settings-icon > img,
 body.dark .weather-icon {
   filter: invert(1) contrast(0.1);
 }
+
+label {
+  cursor: text;
+}

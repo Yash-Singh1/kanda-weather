@@ -22,6 +22,7 @@ function App() {
   let [searchValue, setSearchValue] = useState([
     queryParam ? decodeURIComponent(queryParam) : ''
   ]);
+  let [inputValue, setInputValue] = useState(searchValue[0]);
 
   const dispatch = useDispatch();
 
@@ -47,7 +48,7 @@ function App() {
   }, []);
 
   function redirectSearch() {
-    if (searchValue.length === 0) {
+    if (searchValue.length === 0 && inputValue === '') {
       if (!queryParam) {
         return;
       }
@@ -56,7 +57,8 @@ function App() {
     if (searchValue[0] === queryParam) {
       return;
     }
-    location.search = '?q=' + searchValue[0] + '&date=' + formatDate(dateParam);
+    location.search =
+      '?q=' + (searchValue[0] || inputValue) + '&date=' + formatDate(dateParam);
   }
 
   return (
@@ -86,9 +88,10 @@ function App() {
                   }
                 }
               }}
+              onInputChange={setInputValue}
             />
             <Button onClick={redirectSearch}>
-              <img src={searchIcon} alt='search icon' />
+              <img src={searchIcon} alt={LOCALES.searchIcon[language]} />
             </Button>
           </InputGroup>
         </FormGroup>
@@ -111,7 +114,7 @@ function App() {
               className='position-absolute top-50 start-50 text-nowrap'
               data-aos='fade-up'
             >
-              Requested location "{query}" not found
+              {LOCALES.requestedLocationNotFound[language](query)}
             </h5>
           )
         ) : null
@@ -120,12 +123,12 @@ function App() {
           className='position-absolute top-50 start-50 text-nowrap'
           data-aos='fade-up'
         >
-          Search for something
+          {LOCALES.searchSomething[language]}
         </h5>
       )}
 
       <Link to='/settings' id='settings-icon'>
-        <img width='50px' src={gearIcon} alt='settings' />
+        <img width='50px' src={gearIcon} alt={LOCALES.settings[language]} />
       </Link>
     </>
   );

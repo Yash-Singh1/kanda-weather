@@ -24,26 +24,28 @@ function Settings() {
 
   return (
     <div id='settings'>
-      <Link to='/'>← Return to home</Link>
+      <Link to='/'>← {LOCALES.returnToHome[language]}</Link>
       <Form className='position-absolute top-50 start-50' data-aos='fade-up'>
         <FormGroup>
-          <FormLabel>Language: </FormLabel>{' '}
-          <DropdownButton title={language}>
-            {Object.values(LOCALES.languageNames.English).map((lang, index) => (
-              <Dropdown.Item
-                key={index}
-                onClick={() => dispatch(setLanguage(lang))}
-              >
-                {lang}
-              </Dropdown.Item>
-            ))}
+          <FormLabel>{LOCALES.language[language]}: </FormLabel>{' '}
+          <DropdownButton title={LOCALES.languageNames[language][language]}>
+            {Object.entries(LOCALES.languageNames[language]).map(
+              (lang, index) => (
+                <Dropdown.Item
+                  key={index}
+                  onClick={() => dispatch(setLanguage(lang[0]))}
+                >
+                  {lang[1]}
+                </Dropdown.Item>
+              )
+            )}
           </DropdownButton>
         </FormGroup>
         <br />
         <FormGroup>
           <FormCheck
             onClick={(event) => dispatch(setDarkMode(event.target.checked))}
-            label='Dark mode'
+            label={LOCALES.darkMode[language]}
             defaultChecked={darkMode}
           />
         </FormGroup>

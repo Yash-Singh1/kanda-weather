@@ -48,6 +48,30 @@ const LOCALES = {
     French: 'icône de recherche',
     Yoruba: 'àwárí aami',
     Swahili: 'aikoni ya utafutaji'
+  },
+  requestedLocationNotFound: {
+    English: (location) => `Requested location “${location}” not found`,
+    French: (location) => `Emplacement demandé “${location}” introuvable`,
+    Yoruba: (location) => `Ipo ti a beere “${location}” ko rii`,
+    Swahili: (location) => `Eneo lililoombwa “${location}” halijapatikana`
+  },
+  settings: {
+    English: 'settings',
+    French: 'paramètres',
+    Yoruba: 'ètò',
+    Swahili: 'mipangilio'
+  },
+  darkMode: {
+    English: 'Dark Mode',
+    French: 'Mode sombre',
+    Yoruba: 'Ipo Dudu',
+    Swahili: 'Njia Nyeusi'
+  },
+  returnToHome: {
+    English: 'Return to home',
+    French: 'Retourner à la maison',
+    Yoruba: 'Pada si ile',
+    Swahili: 'Rudi nyumbani'
   }
 };
 
