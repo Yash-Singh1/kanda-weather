@@ -1,6 +1,151 @@
 body {
   text-align: center;
-  font-size: 20px;
-  padding: 2.5%;
+  font-size: 30px;
+  padding: 5%;
   font-family: 'Baloo Bhai 2', cursive;
+}
+
+a.dropdown-item {
+  margin-left: 10px;
+}
+
+#search\ bar {
+  overflow-x: hidden !important;
+}
+
+#dashboard {
+  margin-top: 50px;
+}
+
+.form-group {
+  display: inline-block;
+}
+
+button > img {
+  filter: invert(1);
+}
+
+input[type='date'] {
+  text-align: center;
+}
+
+body.dark input[type='date'] {
+  color: #30403a !important;
+  background-color: cornflowerblue !important;
+}
+
+::-webkit-datetime-edit-month-field,
+::-webkit-datetime-edit-day-field,
+::-webkit-datetime-edit-week-field,
+::-webkit-datetime-edit-year-field,
+::-webkit-datetime-edit-ampm-field,
+::-webkit-datetime-edit-hour-field,
+::-webkit-datetime-edit-millisecond-field,
+::-webkit-datetime-edit-minute-field,
+::-webkit-datetime-edit-second-field {
+  cursor: text;
+}
+
+::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+#preview-icons {
+  margin-top: 50px;
+}
+
+#preview-icons > div:nth-child(2) > div > .weather-icon {
+  cursor: pointer;
+}
+
+#preview-icons > div:nth-child(2) > div > span {
+  font-size: 75%;
+}
+
+#preview-icons > div > div > .weather-icon,
+#settings-icon {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+#preview-icons > div > div > i {
+  vertical-align: middle;
+}
+
+.font-size-50 {
+  font-size: 50px;
+}
+
+.font-size-100 {
+  font-size: 100px;
+}
+
+div.dropdown {
+  display: inline-block;
+}
+
+div.form-group:nth-child(1) {
+  white-space: nowrap;
+}
+
+form > div.form-group {
+  margin: 20px;
+}
+
+a {
+  text-decoration: none;
+  float: left;
+}
+
+#settings [data-aos='fade-up'],
+h5.position-absolute.top-50.start-50.text-nowrap {
+  -webkit-transform: translate3d(-50%, 50px, 0);
+  transform: translate3d(-50%, 50px, 0);
+}
+
+h5.position-absolute.top-50.start-50.text-nowrap.aos-animate {
+  transform: translate(-50%, -50%);
+}
+
+#settings [data-aos^='fade'][data-aos^='fade'].aos-animate {
+  transform: translate(-50%, -50%);
+}
+
+#settings-icon {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+div.col-sm-12.mx-auto,
+div.row:nth-child(2) > div:not(.offset) {
+  width: min-content;
+}
+
+div.row:nth-child(2) {
+  margin-top: 10px;
+}
+
+input.form-check-input {
+  cursor: pointer;
+}
+
+body.dark input.rbt-input-main {
+  background-color: #303030;
+  caret-color: white;
+  color: white !important;
+}
+
+body.dark input.rbt-input-hint {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body.dark #settings-icon > img,
+body.dark .weather-icon {
+  filter: invert(1) contrast(0.1);
 }
