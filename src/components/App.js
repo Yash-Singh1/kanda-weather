@@ -11,6 +11,7 @@ import formatDate from '../helpers/formatDate';
 import { useDispatch, useSelector } from 'react-redux';
 import { setData, setQuery } from '../actions';
 import LOCALES from '../data/localization';
+import QUERIES from '../data/queries';
 
 const search = new URLSearchParams(location.search);
 const queryParam = search.get('q');
@@ -99,12 +100,11 @@ function App() {
 
       {query ? (
         data.length > 0 ? (
-          data.map((datapoint) => datapoint.split(': ')[0]).includes(query) ? (
+          Object.values(QUERIES).find((queryMatcher) => queryMatcher(query)) ? (
             <Dashboard
-              query={query}
-              data={
-                data.filter((datapoint) =>
-                  datapoint.startsWith(`${query}: ${formatDate(dateParam)}`)
+              query={
+                Object.entries(QUERIES).find((queryMatcher) =>
+                  queryMatcher[1](query)
                 )[0]
               }
               givenDate={dateParam}
