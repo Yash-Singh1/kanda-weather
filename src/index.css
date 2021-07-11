@@ -64,8 +64,7 @@ body.dark input[type='date'] {
 
 img,
 i.weather-icon,
-#settings-icon,
-.input-group {
+#settings-icon {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
