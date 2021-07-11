@@ -32,10 +32,10 @@ const LOCALES = {
     Swahili: 'Lugha'
   },
   search: {
-    English: 'Search',
-    French: 'Rechercher',
-    Yoruba: 'Ṣawari',
-    Swahili: 'Tafuta'
+    English: 'Search for a location',
+    French: 'Rechercher un emplacement',
+    Yoruba: 'Wa ipo',
+    Swahili: 'Tafuta mahali'
   },
   searchSomething: {
     English: 'Search for something',
@@ -72,6 +72,60 @@ const LOCALES = {
     French: 'Retourner à la maison',
     Yoruba: 'Pada si ile',
     Swahili: 'Rudi nyumbani'
+  },
+  dataUnavaliable: {
+    English: 'data unavaliable',
+    French: 'données non disponibles',
+    Yoruba: 'alaye ko si',
+    Swahili: 'habari haipatikani'
+  },
+  noData: {
+    English: 'No data',
+    French: 'Aucune information',
+    Yoruba: 'Ko si alaye',
+    Swahili: 'Hakuna habari'
+  },
+  Morning: {
+    English: 'Morning',
+    French: 'Matin',
+    Yoruba: 'Owuro',
+    Swahili: 'Asubuhi'
+  },
+  Afternoon: {
+    English: 'Afternoon',
+    French: 'Après midi',
+    Yoruba: 'Ọjọkanri',
+    Swahili: 'Mchana'
+  },
+  Evening: {
+    English: 'Evening',
+    French: 'Soir',
+    Yoruba: 'Irọlẹ',
+    Swahili: 'Jioni'
+  },
+  Night: {
+    English: 'Night',
+    French: 'Nuit',
+    Yoruba: 'Alẹ',
+    Swahili: 'Usiku'
+  },
+  sunny: {
+    English: 'Sunny',
+    French: 'Ensoleillé',
+    Yoruba: 'Oorun',
+    Swahili: 'Jua'
+  },
+  clear: {
+    English: 'Clear',
+    French: 'Dégager',
+    Yoruba: 'Ko si awọsanma',
+    Swahili: 'Wazi'
+  },
+  foggy: {
+    English: 'Foggy',
+    French: 'Ukungu',
+    Yoruba: 'Idẹ',
+    Swahili: 'Ukungu'
   }
 };
 

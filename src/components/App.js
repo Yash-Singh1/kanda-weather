@@ -13,11 +13,7 @@ import { setData, setQuery } from '../actions';
 import LOCALES from '../data/localization';
 import QUERIES from '../data/queries';
 
-const search = new URLSearchParams(location.search);
-const queryParam = search.get('q');
-const dateParam = search.get('date')
-  ? new Date(decodeURIComponent(search.get('date')))
-  : new Date();
+const queryParam = new URLSearchParams(location.search).get('q');
 
 function App() {
   let [searchValue, setSearchValue] = useState([
@@ -28,17 +24,18 @@ function App() {
   const dispatch = useDispatch();
 
   const data = useSelector((state) => state.data);
+  const date = useSelector((state) => state.date);
   const query = useSelector((state) => state.query);
   const language = useSelector((state) => state.language);
 
   useEffect(() => {
     if (query === '' && queryParam && queryParam !== '') {
-      location.search = '?date=' + formatDate(dateParam);
+      location.search = '?date=' + formatDate(date);
     }
   }, [query]);
 
   if (!queryParam && query) {
-    window.history.pushState('', '', '?q=' + query);
+    window.history.pushState('', '', '?q=' + encodeURIComponent(query));
     setSearchValue([query]);
   }
 
@@ -59,16 +56,19 @@ function App() {
       return;
     }
     location.search =
-      '?q=' + (searchValue[0] || inputValue) + '&date=' + formatDate(dateParam);
+      '?q=' +
+      encodeURIComponent(searchValue[0] || inputValue) +
+      '&date=' +
+      formatDate(date);
   }
 
   return (
     <>
       <Form inline>
-        <FormGroup>
+        <FormGroup className='text-nowrap'>
           <InputGroup>
             <Typeahead
-              id='search bar'
+              id='search-bar'
               options={
                 data.length > 0
                   ? [
@@ -107,7 +107,6 @@ function App() {
                   queryMatcher[1](query)
                 )[0]
               }
-              givenDate={dateParam}
             />
           ) : (
             <h5

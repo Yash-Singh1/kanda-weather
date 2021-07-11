@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setDarkMode, setLanguage } from '../actions';
 import { Link } from 'react-router-dom';
 import LOCALES from '../data/localization';
+import formatDate from '../helpers/formatDate';
 
 if (!localStorage.getItem('language')) {
   localStorage.setItem('language', 'English');
@@ -19,12 +20,22 @@ if (!localStorage.getItem('language')) {
 function Settings() {
   const language = useSelector((state) => state.language);
   const darkMode = useSelector((state) => state.darkMode);
+  const query = useSelector((state) => state.query);
+  const date = useSelector((state) => state.date);
 
   const dispatch = useDispatch();
 
   return (
     <div id='settings'>
-      <Link to='/'>← {LOCALES.returnToHome[language]}</Link>
+      <Link
+        to={
+          query === ''
+            ? '/'
+            : '/?q=' + encodeURIComponent(query) + '&date=' + formatDate(date)
+        }
+      >
+        ← {LOCALES.returnToHome[language]}
+      </Link>
       <Form className='position-absolute top-50 start-50' data-aos='fade-up'>
         <FormGroup>
           <FormLabel>{LOCALES.language[language]}: </FormLabel>{' '}

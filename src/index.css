@@ -5,16 +5,16 @@ body {
   font-family: 'Baloo Bhai 2', cursive;
 }
 
-a.dropdown-item {
+.rbt a.dropdown-item {
   margin-left: 10px;
 }
 
-#search\ bar {
+#search-bar {
   overflow-x: hidden !important;
 }
 
 #dashboard {
-  margin-top: 50px;
+  margin-top: 70px;
 }
 
 .form-group {
@@ -62,8 +62,10 @@ body.dark input[type='date'] {
   font-size: 75%;
 }
 
-#preview-icons > div > div > .weather-icon,
-#settings-icon {
+img,
+i.weather-icon,
+#settings-icon,
+.input-group {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -79,10 +81,6 @@ body.dark input[type='date'] {
 
 .font-size-50 {
   font-size: 50px;
-}
-
-.font-size-100 {
-  font-size: 100px;
 }
 
 div.dropdown {
@@ -103,17 +101,16 @@ a {
 }
 
 #settings [data-aos='fade-up'],
-h5.position-absolute.top-50.start-50.text-nowrap {
-  -webkit-transform: translate3d(-50%, 50px, 0);
-  transform: translate3d(-50%, 50px, 0);
+h5,
+div#no-data-question-container[data-aos='fade-up'] {
+  -webkit-transform: translate3d(-50%, 50px, 0) !important;
+  transform: translate3d(-50%, 50px, 0) !important;
 }
 
-h5.position-absolute.top-50.start-50.text-nowrap.aos-animate {
-  transform: translate(-50%, -50%);
-}
-
-#settings [data-aos^='fade'][data-aos^='fade'].aos-animate {
-  transform: translate(-50%, -50%);
+h5.aos-animate,
+#settings [data-aos^='fade'][data-aos^='fade'].aos-animate,
+div#no-data-question-container.aos-animate {
+  transform: translate(-50%, -50%) !important;
 }
 
 #settings-icon {
@@ -146,10 +143,19 @@ body.dark input.rbt-input-hint {
 }
 
 body.dark #settings-icon > img,
-body.dark .weather-icon {
-  filter: invert(1) contrast(0.1);
+body.dark .weather-icon,
+body.dark #no-data-question {
+  filter: invert(1) contrast(0.1) brightness(1.5);
 }
 
 label {
   cursor: text;
+}
+
+#no-data-question {
+  width: 100px;
+}
+
+#no-data-question + br + span {
+  margin-top: 10px;
 }

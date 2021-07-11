@@ -1,16 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { Button, InputGroup, FormControl } from 'react-bootstrap';
 import formatDate from '../helpers/formatDate';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import 'weathericons/css/weather-icons.min.css';
 import processWeather from '../helpers/processWeather';
+import LOCALES from '../data/localization';
+import filterData from '../helpers/filterData';
+import parseHeaders from 'parse-headers';
+import patchQuestionIcon from 'bootstrap-icons/icons/patch-question.svg';
+import { setDate } from '../actions';
 
-function Dashboard({ givenDate, query }) {
-  const data = useSelector((state) => state.data);
-
-  let [date, setDate] = useState(new Date(givenDate.getTime()));
+function Dashboard({ query }) {
   let [tempDestroy, setTempDestroy] = useState(false);
   let [firstTime, setFirstTime] = useState(true);
+
+  const date = useSelector((state) => state.date);
+  const data = parseHeaders(
+    filterData(
+      useSelector((state) => state.data),
+      query,
+      date
+    )
+  );
+  const language = useSelector((state) => state.language);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (firstTime) {
@@ -19,7 +33,7 @@ function Dashboard({ givenDate, query }) {
       window.history.pushState(
         '',
         '',
-        '?q=' + query + '&date=' + formatDate(date)
+        '?q=' + encodeURIComponent(query) + '&date=' + formatDate(date)
       );
       setTempDestroy(true);
     }
@@ -35,7 +49,9 @@ function Dashboard({ givenDate, query }) {
     <div id='dashboard'>
       <InputGroup>
         <Button
-          onClick={() => setDate(new Date(date.setDate(date.getDate() - 1)))}
+          onClick={() =>
+            dispatch(setDate(new Date(date.setDate(date.getDate() - 1))))
+          }
         >
           ◂
         </Button>
@@ -45,26 +61,37 @@ function Dashboard({ givenDate, query }) {
             date.getMonth() + 1
           }-${date.getDate() < 10 ? 0 : ''}${date.getDate()}`}
           onChange={(event) =>
-            setDate(new Date(event.target.value.replace('-', ', ')))
+            dispatch(setDate(new Date(event.target.value.replace('-', ', '))))
           }
         />
         <Button
-          onClick={() => setDate(new Date(date.setDate(date.getDate() + 1)))}
+          onClick={() =>
+            dispatch(setDate(new Date(date.setDate(date.getDate() + 1))))
+          }
         >
           ▸
         </Button>
       </InputGroup>
 
-      {tempDestroy ? null : (
-        <div id='preview-icons' data-aos='fade-up'>
-          <div className='row'>
-            {processWeather(date, data, query, setDate)(0, 0)}
-          </div>
-          <div className='row'>
-            <div className='col-sm-2 offset'></div>
-            {[-2, -1, 1, 2].map(processWeather(date, data, query, setDate))}
-            <div className='col-sm-2 offset'></div>
-          </div>
+      {tempDestroy ? null : Object.keys(data).length === 0 ? (
+        <div
+          data-aos='fade-up'
+          className='position-absolute top-50 start-50 text-nowrap'
+          id='no-data-question-container'
+        >
+          <img
+            src={patchQuestionIcon}
+            alt={LOCALES.dataUnavaliable[language]}
+            id='no-data-question'
+          />
+          <br />
+          <span>{LOCALES.noData[language]}</span>
+        </div>
+      ) : (
+        <div id='preview-icons' className='row' data-aos='fade-up'>
+          {['Morning', 'Afternoon', 'Evening', 'Night'].map(
+            processWeather(data, language)
+          )}
         </div>
       )}
     </div>
