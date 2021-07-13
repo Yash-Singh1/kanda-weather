@@ -126,6 +126,42 @@ const LOCALES = {
     French: 'Ukungu',
     Yoruba: 'Idẹ',
     Swahili: 'Ukungu'
+  },
+  rain: {
+    English: 'Rain',
+    French: 'Pluie',
+    Yoruba: 'Ojo',
+    Swahili: 'Mvua'
+  },
+  windy: {
+    English: 'Windy',
+    French: 'Venteux',
+    Yoruba: 'Afẹfẹ',
+    Swahili: 'Upepo'
+  },
+  cloudy: {
+    English: 'Cloudy',
+    French: 'Nuageux',
+    Yoruba: 'Kurukuru',
+    Swahili: 'Mawingu'
+  },
+  partlyCloudy: {
+    English: 'Partly Cloudy',
+    French: 'Partiellement Nuageux',
+    Yoruba: 'Kurukuru ni apakan',
+    Swahili: 'Mawingu kiasi'
+  },
+  chanceOfRain: {
+    English: 'Chance of Rain',
+    French: 'Risque de Pluie',
+    Yoruba: 'Seese Ojo',
+    Swahili: 'Uwezekano wa Mvua'
+  },
+  humidity: {
+    English: 'Humidity',
+    French: 'Humidité',
+    Yoruba: 'Ọriniinitutu',
+    Swahili: 'Unyevu'
   }
 };
 

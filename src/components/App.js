@@ -13,11 +13,11 @@ import { setData, setQuery } from '../actions';
 import LOCALES from '../data/localization';
 import QUERIES from '../data/queries';
 
-const queryParam = new URLSearchParams(location.search).get('q');
-
 function App() {
   let [searchValue, setSearchValue] = useState([
-    queryParam ? decodeURIComponent(queryParam) : ''
+    new URLSearchParams(location.search).get('q')
+      ? decodeURIComponent(new URLSearchParams(location.search).get('q'))
+      : ''
   ]);
   let [inputValue, setInputValue] = useState(searchValue[0]);
 
@@ -29,12 +29,16 @@ function App() {
   const language = useSelector((state) => state.language);
 
   useEffect(() => {
-    if (query === '' && queryParam && queryParam !== '') {
+    if (
+      query === '' &&
+      new URLSearchParams(location.search).get('q') &&
+      new URLSearchParams(location.search).get('q') !== ''
+    ) {
       location.search = '?date=' + formatDate(date);
     }
   }, [query]);
 
-  if (!queryParam && query) {
+  if (!new URLSearchParams(location.search).get('q') && query) {
     window.history.pushState('', '', '?q=' + encodeURIComponent(query));
     setSearchValue([query]);
   }
@@ -47,12 +51,12 @@ function App() {
 
   function redirectSearch() {
     if (searchValue.length === 0 && inputValue === '') {
-      if (!queryParam) {
+      if (!new URLSearchParams(location.search).get('q')) {
         return;
       }
       dispatch(setQuery(''));
     }
-    if (searchValue[0] === queryParam) {
+    if (searchValue[0] === new URLSearchParams(location.search).get('q')) {
       return;
     }
     location.search =

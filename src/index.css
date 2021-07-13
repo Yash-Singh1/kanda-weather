@@ -44,14 +44,6 @@ body.dark input[type='date'] {
   cursor: pointer;
 }
 
-#preview-icons > div:nth-child(2) > div > .weather-icon {
-  cursor: pointer;
-}
-
-#preview-icons > div:nth-child(2) > div > span {
-  font-size: 75%;
-}
-
 img,
 i.weather-icon,
 #settings-icon {
@@ -62,10 +54,6 @@ i.weather-icon,
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
-}
-
-#preview-icons > div > div > i {
-  vertical-align: middle;
 }
 
 .font-size-50 {

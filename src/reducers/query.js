@@ -6,13 +6,23 @@ function query(
     '',
   action
 ) {
+  let nextQuery;
+
   switch (action.type) {
     case SET_QUERY:
       localStorage.setItem('query', action.query);
-      return action.query;
+      nextQuery = action.query;
+      break;
     default:
-      return state;
+      nextQuery = state;
+      break;
   }
+
+  if (localStorage.getItem('query') !== nextQuery) {
+    localStorage.setItem('query', nextQuery);
+  }
+
+  return nextQuery;
 }
 
 export default query;

@@ -117,7 +117,7 @@ function Dashboard({ query }) {
                       const raining =
                         parseFloat(data['chance of rain'].slice(0, -1)) >= 60;
                       const foggy =
-                        parseFloat(data['humidity'].slice(0, -1)) >= 95;
+                        parseFloat(data.humidity.slice(0, -1)) >= 95;
                       return (
                         <div key={index} className='col-3 mx-auto'>
                           <span className='text-nowrap'>
@@ -174,13 +174,13 @@ function Dashboard({ query }) {
                               : foggy
                               ? LOCALES.foggy[language]
                               : raining
-                              ? 'Raining'
+                              ? LOCALES.rain[language]
                               : windy
-                              ? 'windy'
+                              ? LOCALES.windy[language]
                               : data.condition === 'Cloudy'
-                              ? 'Cloudy'
+                              ? LOCALES.cloudy[language]
                               : data.condition === 'Partly Cloudy'
-                              ? 'Partly Cloudy'
+                              ? LOCALES.partlyCloudy[language]
                               : ''}
                           </span>
                         </div>
@@ -203,7 +203,7 @@ function Dashboard({ query }) {
                         {(value) => (
                           <CircularProgressbarWithChildren
                             value={value}
-                          >{`Chance of rain: ${value}%`}</CircularProgressbarWithChildren>
+                          >{`${LOCALES.chanceOfRain[language]}: ${value}%`}</CircularProgressbarWithChildren>
                         )}
                       </ProgressProvider>
                     </div>
@@ -215,12 +215,12 @@ function Dashboard({ query }) {
                     >
                       <ProgressProvider
                         valueStart={10}
-                        valueEnd={parseFloat(data['humidity'].slice(0, -1))}
+                        valueEnd={parseFloat(data.humidity.slice(0, -1))}
                       >
                         {(value) => (
                           <CircularProgressbarWithChildren
                             value={value}
-                          >{`Relative Humidity: ${value}%`}</CircularProgressbarWithChildren>
+                          >{`${LOCALES.humidity[language]}: ${value}%`}</CircularProgressbarWithChildren>
                         )}
                       </ProgressProvider>
                     </div>
