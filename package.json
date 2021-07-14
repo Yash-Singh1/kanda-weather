@@ -10,7 +10,6 @@
     "aos": "^2.3.4",
     "bootstrap-icons": "^1.5.0",
     "express": "^4.17.1",
-    "live-server": "^1.2.1",
     "parcel-bundler": "^1.12.5",
     "parse-headers": "^2.0.3",
     "react": "^17.0.2",
@@ -20,7 +19,6 @@
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
-    "react-thermometer-component": "^1.0.1",
     "redux": "^4.1.0",
     "weathericons": "^2.0.10"
   },
