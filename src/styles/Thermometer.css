@@ -363,6 +363,12 @@
   white-space: nowrap;
 }
 
+.thermometer .thermometer__percent-min:hover,
+.thermometer .thermometer__percent-max:hover,
+.thermometer .thermometer__percent-current:hover {
+  z-index: 10;
+}
+
 .thermometer .thermometer__percent-min,
 .thermometer .thermometer__percent-max {
   transform: translateX(calc(-100% - 8px)) translateY(-50%);

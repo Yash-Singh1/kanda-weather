@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, InputGroup, FormControl } from 'react-bootstrap';
 import formatDate from '../helpers/formatDate';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,6 +16,7 @@ import Thermometer from './Thermometer';
 function Dashboard({ query }) {
   let [tempDestroy, setTempDestroy] = useState(false);
   let [firstTime, setFirstTime] = useState(true);
+  const [, forceRender] = useState({});
 
   const date = useSelector((state) => state.date);
   const data = parseHeaders(
@@ -28,7 +29,89 @@ function Dashboard({ query }) {
   const language = useSelector((state) => state.language);
   const darkMode = useSelector((state) => state.darkMode);
 
+  const processWeather = useCallback(
+    (stage, index) => {
+      const windy =
+        data.wind !== 'Unknown' &&
+        parseFloat(data.wind.split(' at ')[1].split(' ')[0]) >= 20;
+      const raining = parseFloat(data['chance of rain'].slice(0, -1)) >= 60;
+      const foggy = parseFloat(data.humidity.slice(0, -1)) >= 95;
+      return (
+        <div
+          key={index}
+          className={`col-${
+            matchMedia('(max-width: 576px)').matches ? 6 : 3
+          } mx-auto`}
+        >
+          <span className='text-nowrap'>{LOCALES[stage][language]}</span>
+          <br />
+          <i
+            className={`weather-icon wi ${
+              data.condition === 'Sunny'
+                ? 'wi-' +
+                  (stage === 'Morning' || stage === 'Afternoon'
+                    ? 'day-sunny'
+                    : 'night-clear')
+                : data.condition === 'Cloudy'
+                ? raining
+                  ? 'wi-' +
+                    (stage === 'Morning' || stage === 'Afternoon'
+                      ? ''
+                      : 'night-alt-') +
+                    'rain' +
+                    (windy ? '-wind' : '')
+                  : 'wi-' + (foggy ? 'fog' : 'cloudy')
+                : data.condition === 'Partly Cloudy'
+                ? raining && windy
+                  ? 'wi-' +
+                    (stage === 'Morning' || stage === 'Afternoon'
+                      ? 'day'
+                      : 'night-alt') +
+                    '-rain-wind'
+                  : raining
+                  ? 'wi-' +
+                    (stage === 'Morning' || stage === 'Afternoon'
+                      ? 'day'
+                      : 'night-alt') +
+                    '-rain'
+                  : 'wi-' +
+                    (stage === 'Morning' || stage === 'Afternoon'
+                      ? 'day'
+                      : 'night' + (foggy ? '' : '-alt')) +
+                    (foggy ? '-fog' : '-partly-cloudy')
+                : ''
+            } font-size-50`}
+          ></i>
+          <br />
+          <span className='text-nowrap'>
+            {data.condition === 'Sunny'
+              ? stage === 'Morning' || stage === 'Afternoon'
+                ? LOCALES.sunny[language]
+                : LOCALES.clear[language]
+              : foggy
+              ? LOCALES.foggy[language]
+              : raining
+              ? LOCALES.rain[language]
+              : windy
+              ? LOCALES.windy[language]
+              : data.condition === 'Cloudy'
+              ? LOCALES.cloudy[language]
+              : data.condition === 'Partly Cloudy'
+              ? LOCALES.partlyCloudy[language]
+              : ''}
+          </span>
+        </div>
+      );
+    },
+    [data, language]
+  );
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    matchMedia('(max-width: 576px)').onchange = () => forceRender({});
+    matchMedia('(max-width: 768px)').onchange = () => forceRender({});
+  }, []);
 
   useEffect(() => {
     if (firstTime) {
@@ -95,7 +178,10 @@ function Dashboard({ query }) {
         <>
           <div className='container-fluid' data-aos='fade-up'>
             <div className='row'>
-              <div id='thermometer-container' className='col-3 part-border'>
+              <div
+                id='thermometer-container'
+                className='col-md-3 col-sm-4 col-12 part-border'
+              >
                 <Thermometer
                   theme={darkMode ? 'dark' : 'light'}
                   minTemp={10}
@@ -104,101 +190,43 @@ function Dashboard({ query }) {
                   max='50'
                   steps='3'
                   format='°C'
-                  size='large'
-                  height='300'
+                  size={
+                    matchMedia('(max-width: 576px)').matches
+                      ? 'small'
+                      : matchMedia('(max-width: 768px)').matches
+                      ? 'normal'
+                      : 'large'
+                  }
+                  height={
+                    matchMedia('(max-width: 768px)').matches ? '200' : '300'
+                  }
                   minTempLabel={LOCALES.low[language]}
                   currentTempLabel={LOCALES.current[language]}
                   maxTempLabel={LOCALES.high[language]}
                 />
               </div>
-              <div className='col-9'>
+              <div className='col-md-9 col-sm-8 col-12'>
                 <div id='preview-icons' className='row part-border'>
-                  {['Morning', 'Afternoon', 'Evening', 'Night'].map(
-                    (stage, index) => {
-                      const windy =
-                        data.wind !== 'Unknown' &&
-                        parseFloat(data.wind.split(' at ')[1].split(' ')[0]) >=
-                          20;
-                      const raining =
-                        parseFloat(data['chance of rain'].slice(0, -1)) >= 60;
-                      const foggy =
-                        parseFloat(data.humidity.slice(0, -1)) >= 95;
-                      return (
-                        <div key={index} className='col-3 mx-auto'>
-                          <span className='text-nowrap'>
-                            {LOCALES[stage][language]}
-                          </span>
-                          <br />
-                          <i
-                            className={`weather-icon wi ${
-                              data.condition === 'Sunny'
-                                ? 'wi-' +
-                                  (stage === 'Morning' || stage === 'Afternoon'
-                                    ? 'day-sunny'
-                                    : 'night-clear')
-                                : data.condition === 'Cloudy'
-                                ? raining
-                                  ? 'wi-' +
-                                    (stage === 'Morning' ||
-                                    stage === 'Afternoon'
-                                      ? ''
-                                      : 'night-alt-') +
-                                    'rain' +
-                                    (windy ? '-wind' : '')
-                                  : 'wi-' + (foggy ? 'fog' : 'cloudy')
-                                : data.condition === 'Partly Cloudy'
-                                ? raining && windy
-                                  ? 'wi-' +
-                                    (stage === 'Morning' ||
-                                    stage === 'Afternoon'
-                                      ? 'day'
-                                      : 'night-alt') +
-                                    '-rain-wind'
-                                  : raining
-                                  ? 'wi-' +
-                                    (stage === 'Morning' ||
-                                    stage === 'Afternoon'
-                                      ? 'day'
-                                      : 'night-alt') +
-                                    '-rain'
-                                  : 'wi-' +
-                                    (stage === 'Morning' ||
-                                    stage === 'Afternoon'
-                                      ? 'day'
-                                      : 'night' + (foggy ? '' : '-alt')) +
-                                    (foggy ? '-fog' : '-partly-cloudy')
-                                : ''
-                            } font-size-50`}
-                          ></i>
-                          <br />
-                          <span className='text-nowrap'>
-                            {data.condition === 'Sunny'
-                              ? stage === 'Morning' || stage === 'Afternoon'
-                                ? LOCALES.sunny[language]
-                                : LOCALES.clear[language]
-                              : foggy
-                              ? LOCALES.foggy[language]
-                              : raining
-                              ? LOCALES.rain[language]
-                              : windy
-                              ? LOCALES.windy[language]
-                              : data.condition === 'Cloudy'
-                              ? LOCALES.cloudy[language]
-                              : data.condition === 'Partly Cloudy'
-                              ? LOCALES.partlyCloudy[language]
-                              : ''}
-                          </span>
+                  {matchMedia('(max-width: 576px)').matches ? (
+                    <>
+                      <div className='col-12'>
+                        <div className='row'>
+                          {['Morning', 'Afternoon'].map(processWeather)}
                         </div>
-                      );
-                    }
+                        <div className='row'>
+                          {['Evening', 'Night'].map(processWeather)}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    ['Morning', 'Afternoon', 'Evening', 'Night'].map(
+                      processWeather
+                    )
                   )}
                 </div>
                 <div id='progress-ring-row' className='row part-border'>
                   <div className='col-6'>
-                    <div
-                      style={{ width: 200, maxWidth: 'inherit' }}
-                      className='mx-auto'
-                    >
+                    <div className='mx-auto progress-ring'>
                       <ProgressProvider
                         valueStart={10}
                         valueEnd={parseFloat(
@@ -214,10 +242,7 @@ function Dashboard({ query }) {
                     </div>
                   </div>
                   <div className='col-6'>
-                    <div
-                      style={{ width: 200, maxWidth: 'inherit' }}
-                      className='mx-auto'
-                    >
+                    <div className='mx-auto progress-ring'>
                       <ProgressProvider
                         valueStart={0}
                         valueEnd={parseFloat(data.humidity.slice(0, -1))}

@@ -3,7 +3,7 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import { Form, FormGroup, InputGroup, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import searchIcon from 'bootstrap-icons/icons/search.svg';
-import gearIcon from 'bootstrap-icons/icons/gear.svg';
+import gearIcon from 'bootstrap-icons/icons/gear-fill.svg';
 import forecast from '../forecast.txt';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import Dashboard from './Dashboard';
