@@ -164,7 +164,3 @@ div.thermometer {
   margin-right: auto;
   margin-left: auto;
 }
-
-.thermometer__percent-current {
-  white-space: nowrap;
-}

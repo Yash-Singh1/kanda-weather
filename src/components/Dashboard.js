@@ -11,7 +11,7 @@ import { setDate } from '../actions';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import ProgressProvider from './ProgressProvider';
 import 'react-circular-progressbar/dist/styles.css';
-import Thermometer from 'react-thermometer-component';
+import Thermometer from './Thermometer';
 
 function Dashboard({ query }) {
   let [tempDestroy, setTempDestroy] = useState(false);
@@ -98,7 +98,9 @@ function Dashboard({ query }) {
               <div className='col-3'>
                 <Thermometer
                   theme={darkMode ? 'dark' : 'light'}
+                  minTemp={10}
                   value={data.temperature.slice(0, -1)}
+                  maxTemp={30}
                   max='50'
                   steps='3'
                   format='°C'
