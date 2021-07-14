@@ -16,7 +16,13 @@ To start the server, run:
 npm run start
 ```
 
-To start a development enviornment, run:
+To start a development server, run:
+
+```sh
+parcel watch src/index.html
+```
+
+Then open a new terminal and run:
 
 ```sh
 npm run dev

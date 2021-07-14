@@ -69,7 +69,7 @@ function App() {
   return (
     <>
       <Form inline>
-        <FormGroup className='text-nowrap'>
+        <FormGroup id='search-bar-group' className='text-nowrap'>
           <InputGroup>
             <Typeahead
               id='search-bar'

@@ -10,8 +10,10 @@ import React from 'react';
 const ProgressProvider = ({ valueStart, valueEnd, children }) => {
   const [value, setValue] = React.useState(valueStart);
   React.useEffect(() => {
-    setValue(valueEnd);
-  }, [valueEnd]);
+    if (value !== valueEnd) {
+      setTimeout(() => setValue(value + 1), 15);
+    }
+  }, [value]);
 
   return children(value);
 };

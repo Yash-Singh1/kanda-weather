@@ -95,7 +95,7 @@ function Dashboard({ query }) {
         <>
           <div className='container-fluid' data-aos='fade-up'>
             <div className='row'>
-              <div className='col-3'>
+              <div id='thermometer-container' className='col-3 part-border'>
                 <Thermometer
                   theme={darkMode ? 'dark' : 'light'}
                   minTemp={10}
@@ -112,7 +112,7 @@ function Dashboard({ query }) {
                 />
               </div>
               <div className='col-9'>
-                <div id='preview-icons' className='row'>
+                <div id='preview-icons' className='row part-border'>
                   {['Morning', 'Afternoon', 'Evening', 'Night'].map(
                     (stage, index) => {
                       const windy =
@@ -193,7 +193,7 @@ function Dashboard({ query }) {
                     }
                   )}
                 </div>
-                <div className='row'>
+                <div id='progress-ring-row' className='row part-border'>
                   <div className='col-6'>
                     <div
                       style={{ width: 200, maxWidth: 'inherit' }}
@@ -219,7 +219,7 @@ function Dashboard({ query }) {
                       className='mx-auto'
                     >
                       <ProgressProvider
-                        valueStart={10}
+                        valueStart={0}
                         valueEnd={parseFloat(data.humidity.slice(0, -1))}
                       >
                         {(value) => (
