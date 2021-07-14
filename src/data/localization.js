@@ -162,6 +162,24 @@ const LOCALES = {
     French: 'Humidité',
     Yoruba: 'Ọriniinitutu',
     Swahili: 'Unyevu'
+  },
+  low: {
+    English: 'Low',
+    French: 'Faible',
+    Yoruba: 'Kekere',
+    Swahili: 'Chini'
+  },
+  current: {
+    English: 'Current',
+    French: 'Actuel',
+    Yoruba: 'Lọwọlọwọ',
+    Swahili: 'Sasa'
+  },
+  high: {
+    English: 'High',
+    French: 'Haut',
+    Yoruba: 'Giga',
+    Swahili: 'Juu'
   }
 };
 

@@ -106,6 +106,9 @@ function Dashboard({ query }) {
                   format='°C'
                   size='large'
                   height='300'
+                  minTempLabel={LOCALES.low[language]}
+                  currentTempLabel={LOCALES.current[language]}
+                  maxTempLabel={LOCALES.high[language]}
                 />
               </div>
               <div className='col-9'>
