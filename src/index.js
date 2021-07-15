@@ -3,14 +3,15 @@ import { render } from 'react-dom';
 import App from './components/App';
 import Settings from './components/Settings';
 import './styles/index.css';
-import { createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import thunk from 'redux-thunk';
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 render(
   <Provider store={store}>
@@ -36,6 +37,6 @@ render(
         'https://unpkg.com/bootstrap@5.0.2/dist/css/bootstrap.min.css';
     }
 
-    document.querySelector('link[rel="preconnect"]').before(link);
+    document.querySelector('link[rel="stylesheet"]').before(link);
   }
 );

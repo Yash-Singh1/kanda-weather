@@ -19,11 +19,5 @@ npm run start
 To start a development server, run:
 
 ```sh
-npm run watch
-```
-
-Then open a new terminal and run:
-
-```sh
 npm run dev
 ```

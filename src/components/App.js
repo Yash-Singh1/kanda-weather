@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { Form, FormGroup, InputGroup, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import searchIcon from 'bootstrap-icons/icons/search.svg';
-import gearIcon from 'bootstrap-icons/icons/gear-fill.svg';
-import forecast from '../forecast.txt';
+import searchIcon from 'url:bootstrap-icons/icons/search.svg';
+import gearIcon from 'url:bootstrap-icons/icons/gear-fill.svg';
+import forecast from 'url:../forecast.txt';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import Dashboard from './Dashboard';
 import formatDate from '../helpers/formatDate';
 import { useDispatch, useSelector } from 'react-redux';
-import { setData, setQuery } from '../actions';
+import { setTextData, setQuery } from '../actions';
 import LOCALES from '../data/localization';
 import QUERIES from '../data/queries';
 
@@ -23,7 +23,7 @@ function App() {
 
   const dispatch = useDispatch();
 
-  const data = useSelector((state) => state.data);
+  const textData = useSelector((state) => state.textData);
   const date = useSelector((state) => state.date);
   const query = useSelector((state) => state.query);
   const language = useSelector((state) => state.language);
@@ -46,7 +46,9 @@ function App() {
   useEffect(() => {
     fetch(forecast)
       .then((response) => response.text())
-      .then((text) => dispatch(setData(text.split('\n'.repeat(4)))));
+      .then((text) =>
+        dispatch(setTextData(text.split('\n'.repeat(4)), 'text'))
+      );
   }, []);
 
   function redirectSearch() {
@@ -74,10 +76,10 @@ function App() {
             <Typeahead
               id='search-bar'
               options={
-                data.length > 0
+                textData.length !== 0
                   ? [
                       ...new Set(
-                        data.map((datapoint) => datapoint.split(': ')[0])
+                        textData.map((datapoint) => datapoint.split(': ')[0])
                       )
                     ]
                   : []
@@ -103,7 +105,7 @@ function App() {
       </Form>
 
       {query ? (
-        data.length > 0 ? (
+        textData.length !== 0 ? (
           Object.values(QUERIES).find((queryMatcher) => queryMatcher(query)) ? (
             <Dashboard
               query={

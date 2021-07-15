@@ -6,12 +6,15 @@ import 'weathericons/css/weather-icons.min.css';
 import LOCALES from '../data/localization';
 import filterData from '../helpers/filterData';
 import parseHeaders from 'parse-headers';
-import patchQuestionIcon from 'bootstrap-icons/icons/patch-question.svg';
-import { setDate } from '../actions';
+import patchQuestionIcon from 'url:bootstrap-icons/icons/patch-question.svg';
+import { fetchDClimateData, setDate } from '../actions';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import ProgressProvider from './ProgressProvider';
 import 'react-circular-progressbar/dist/styles.css';
 import Thermometer from './Thermometer';
+import COORDINATES from '../data/latlon';
+import dashFormatDate from '../helpers/dashFormatDate';
+import extractDClimateDataTemperature from '../helpers/extractDClimateDataTemperature';
 
 function Dashboard({ query }) {
   let [tempDestroy, setTempDestroy] = useState(false);
@@ -19,23 +22,24 @@ function Dashboard({ query }) {
   const [, forceRender] = useState({});
 
   const date = useSelector((state) => state.date);
-  const data = parseHeaders(
+  const textData = parseHeaders(
     filterData(
-      useSelector((state) => state.data),
+      useSelector((state) => state.textData),
       query,
       date
     )
   );
   const language = useSelector((state) => state.language);
   const darkMode = useSelector((state) => state.darkMode);
+  const dclimateData = useSelector((state) => state.dclimateData);
 
   const processWeather = useCallback(
     (stage, index) => {
       const windy =
-        data.wind !== 'Unknown' &&
-        parseFloat(data.wind.split(' at ')[1].split(' ')[0]) >= 20;
-      const raining = parseFloat(data['chance of rain'].slice(0, -1)) >= 60;
-      const foggy = parseFloat(data.humidity.slice(0, -1)) >= 95;
+        textData.wind !== 'Unknown' &&
+        parseFloat(textData.wind.split(' at ')[1].split(' ')[0]) >= 20;
+      const raining = parseFloat(textData['chance of rain'].slice(0, -1)) >= 60;
+      const foggy = parseFloat(textData.humidity.slice(0, -1)) >= 95;
       return (
         <div
           key={index}
@@ -47,12 +51,12 @@ function Dashboard({ query }) {
           <br />
           <i
             className={`weather-icon wi ${
-              data.condition === 'Sunny'
+              textData.condition === 'Sunny'
                 ? 'wi-' +
                   (stage === 'Morning' || stage === 'Afternoon'
                     ? 'day-sunny'
                     : 'night-clear')
-                : data.condition === 'Cloudy'
+                : textData.condition === 'Cloudy'
                 ? raining
                   ? 'wi-' +
                     (stage === 'Morning' || stage === 'Afternoon'
@@ -61,7 +65,7 @@ function Dashboard({ query }) {
                     'rain' +
                     (windy ? '-wind' : '')
                   : 'wi-' + (foggy ? 'fog' : 'cloudy')
-                : data.condition === 'Partly Cloudy'
+                : textData.condition === 'Partly Cloudy'
                 ? raining && windy
                   ? 'wi-' +
                     (stage === 'Morning' || stage === 'Afternoon'
@@ -84,7 +88,7 @@ function Dashboard({ query }) {
           ></i>
           <br />
           <span className='text-nowrap'>
-            {data.condition === 'Sunny'
+            {textData.condition === 'Sunny'
               ? stage === 'Morning' || stage === 'Afternoon'
                 ? LOCALES.sunny[language]
                 : LOCALES.clear[language]
@@ -94,16 +98,16 @@ function Dashboard({ query }) {
               ? LOCALES.rain[language]
               : windy
               ? LOCALES.windy[language]
-              : data.condition === 'Cloudy'
+              : textData.condition === 'Cloudy'
               ? LOCALES.cloudy[language]
-              : data.condition === 'Partly Cloudy'
+              : textData.condition === 'Partly Cloudy'
               ? LOCALES.partlyCloudy[language]
               : ''}
           </span>
         </div>
       );
     },
-    [data, language]
+    [textData, language]
   );
 
   const dispatch = useDispatch();
@@ -111,6 +115,10 @@ function Dashboard({ query }) {
   useEffect(() => {
     matchMedia('(max-width: 576px)').onchange = () => forceRender({});
     matchMedia('(max-width: 768px)').onchange = () => forceRender({});
+    dispatch(fetchDClimateData(COORDINATES[query], 'cpcc_temp_max-daily')).then(
+      () =>
+        dispatch(fetchDClimateData(COORDINATES[query], 'cpcc_temp_min-daily'))
+    );
   }, []);
 
   useEffect(() => {
@@ -144,9 +152,7 @@ function Dashboard({ query }) {
         </Button>
         <FormControl
           type='date'
-          value={`${date.getFullYear()}-${date.getMonth() < 10 ? 0 : ''}${
-            date.getMonth() + 1
-          }-${date.getDate() < 10 ? 0 : ''}${date.getDate()}`}
+          value={dashFormatDate(date)}
           onChange={(event) =>
             dispatch(setDate(new Date(event.target.value.replace('-', ', '))))
           }
@@ -160,7 +166,7 @@ function Dashboard({ query }) {
         </Button>
       </InputGroup>
 
-      {tempDestroy ? null : Object.keys(data).length === 0 ? (
+      {tempDestroy ? null : Object.keys(textData).length === 0 ? (
         <div
           data-aos='fade-up'
           className='position-absolute top-50 start-50 text-nowrap'
@@ -182,28 +188,46 @@ function Dashboard({ query }) {
                 id='thermometer-container'
                 className='col-md-3 col-sm-4 col-12 part-border'
               >
-                <Thermometer
-                  theme={darkMode ? 'dark' : 'light'}
-                  minTemp={10}
-                  value={data.temperature.slice(0, -1)}
-                  maxTemp={30}
-                  max='50'
-                  steps='3'
-                  format='°C'
-                  size={
-                    matchMedia('(max-width: 576px)').matches
-                      ? 'small'
-                      : matchMedia('(max-width: 768px)').matches
-                      ? 'normal'
-                      : 'large'
-                  }
-                  height={
-                    matchMedia('(max-width: 768px)').matches ? '200' : '300'
-                  }
-                  minTempLabel={LOCALES.low[language]}
-                  currentTempLabel={LOCALES.current[language]}
-                  maxTempLabel={LOCALES.high[language]}
-                />
+                {Object.keys(dclimateData).length === 2 ? (
+                  <Thermometer
+                    theme={darkMode ? 'dark' : 'light'}
+                    minTemp={extractDClimateDataTemperature(
+                      dclimateData,
+                      date,
+                      query,
+                      'min'
+                    )}
+                    value={textData.temperature.slice(0, -1)}
+                    maxTemp={extractDClimateDataTemperature(
+                      dclimateData,
+                      date,
+                      query,
+                      'max'
+                    )}
+                    max='50'
+                    steps='3'
+                    format='°C'
+                    size={
+                      matchMedia('(max-width: 576px)').matches
+                        ? 'small'
+                        : matchMedia('(max-width: 768px)').matches
+                        ? 'normal'
+                        : 'large'
+                    }
+                    height={
+                      matchMedia('(max-width: 576px)').matches
+                        ? '200'
+                        : matchMedia('(max-width: 768px)').matches
+                        ? '250'
+                        : '300'
+                    }
+                    minTempLabel={LOCALES.low[language]}
+                    currentTempLabel={LOCALES.current[language]}
+                    maxTempLabel={LOCALES.high[language]}
+                  />
+                ) : (
+                  <div>Loading...</div>
+                )}
               </div>
               <div className='col-md-9 col-sm-8 col-12'>
                 <div id='preview-icons' className='row part-border'>
@@ -230,7 +254,7 @@ function Dashboard({ query }) {
                       <ProgressProvider
                         valueStart={10}
                         valueEnd={parseFloat(
-                          data['chance of rain'].slice(0, -1)
+                          textData['chance of rain'].slice(0, -1)
                         )}
                       >
                         {(value) => (
@@ -245,7 +269,7 @@ function Dashboard({ query }) {
                     <div className='mx-auto progress-ring'>
                       <ProgressProvider
                         valueStart={0}
-                        valueEnd={parseFloat(data.humidity.slice(0, -1))}
+                        valueEnd={parseFloat(textData.humidity.slice(0, -1))}
                       >
                         {(value) => (
                           <CircularProgressbarWithChildren

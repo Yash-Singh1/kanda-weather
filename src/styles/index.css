@@ -2,6 +2,7 @@ body {
   text-align: center;
   font-size: 100%;
   padding: 5%;
+  padding-bottom: calc(5% + 60px);
   font-family: 'Baloo Bhai 2', cursive;
 }
 
@@ -158,10 +159,14 @@ label {
   }
 }
 
-@media (max-width: 768px) and (min-width: 576px) {
+@media (max-width: 767px) and (min-width: 576px) {
   #thermometer-container {
     margin-right: 3%;
     width: 30%;
+  }
+
+  .thermometer {
+    margin-top: 31.25px;
   }
 }
 
@@ -179,4 +184,8 @@ label {
 .progress-ring {
   width: 200px;
   max-width: inherit;
+}
+
+#language-form-group {
+  white-space: nowrap;
 }

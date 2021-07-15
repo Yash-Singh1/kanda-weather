@@ -37,14 +37,14 @@ class Thermometer extends Component {
         <div className='thermometer__meter'>
           <ul className='thermometer__statistics'>{stepIntervals}</ul>
           <div style={heightAndBottomPercent} className='thermometer__mercury'>
-            <div className='thermometer__percent-current' style={currentBottom}>
-              {this.options.currentTempLabel}: {valstr}
-            </div>
             <div className='thermometer__percent-min'>
               {this.options.minTempLabel}: {minstr}
             </div>
             <div className='thermometer__percent-max'>
               {this.options.maxTempLabel}: {maxstr}
+            </div>
+            <div className='thermometer__percent-current' style={currentBottom}>
+              {this.options.currentTempLabel}: {valstr}
             </div>
             <div className='thermometer__mask'>
               <div

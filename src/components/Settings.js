@@ -37,7 +37,7 @@ function Settings() {
         ← {LOCALES.returnToHome[language]}
       </Link>
       <Form className='position-absolute top-50 start-50' data-aos='fade-up'>
-        <FormGroup>
+        <FormGroup id='language-form-group'>
           <FormLabel>{LOCALES.language[language]}: </FormLabel>{' '}
           <DropdownButton title={LOCALES.languageNames[language][language]}>
             {Object.entries(LOCALES.languageNames[language]).map(
