@@ -15,6 +15,7 @@ import Thermometer from './Thermometer';
 import COORDINATES from '../data/latlon';
 import dashFormatDate from '../helpers/dashFormatDate';
 import extractDClimateDataTemperature from '../helpers/extractDClimateDataTemperature';
+import dispatchMultiple from '../helpers/dispatchMultiple';
 
 function Dashboard({ query }) {
   let [tempDestroy, setTempDestroy] = useState(false);
@@ -110,14 +111,14 @@ function Dashboard({ query }) {
     [textData, language]
   );
 
-  const dispatch = useDispatch();
+  const dispatch = dispatchMultiple(useDispatch());
 
   useEffect(() => {
     matchMedia('(max-width: 576px)').onchange = () => forceRender({});
     matchMedia('(max-width: 768px)').onchange = () => forceRender({});
-    dispatch(fetchDClimateData(COORDINATES[query], 'cpcc_temp_max-daily')).then(
-      () =>
-        dispatch(fetchDClimateData(COORDINATES[query], 'cpcc_temp_min-daily'))
+    dispatch(
+      fetchDClimateData(COORDINATES[query], 'cpcc_temp_max-daily'),
+      fetchDClimateData(COORDINATES[query], 'cpcc_temp_min-daily')
     );
   }, []);
 
