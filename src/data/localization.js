@@ -180,6 +180,18 @@ const LOCALES = {
     French: 'Haut',
     Yoruba: 'Giga',
     Swahili: 'Juu'
+  },
+  heatAdvisory: {
+    English: 'Heat Advisory',
+    French: 'Avis de Chaleur',
+    Yoruba: 'Ikilo Ooru',
+    Swahili: 'Onyo la joto'
+  },
+  floodWarning: {
+    English: 'Flood Warning',
+    French: "Avertissement d'inondation",
+    Yoruba: 'Ikilọ ikun omi',
+    Swahili: 'Onyo la Mafuriko'
   }
 };
 

@@ -1,4 +1,6 @@
 import generateLocalStorageKey from '../helpers/generateLocalStorageKey';
+import processSurfaceRunoff from '../helpers/processSurfaceRunoff';
+import timeGeneratedKey from '../helpers/timeGeneratedKey';
 
 export const RECIEVE_DCLIMATE_DATA = 'RECIEVE_DCLIMATE_DATA';
 
@@ -17,7 +19,7 @@ export function fetchDClimateData(latlon, dataset) {
       .then((response) => response.json())
       .then((json) => {
         if (
-          json['time last generated'] !==
+          json[timeGeneratedKey(dataset)] !==
           localStorage.getItem(
             generateLocalStorageKey(dataset, latlon) + '-cache-version'
           )
@@ -25,9 +27,12 @@ export function fetchDClimateData(latlon, dataset) {
           fetch('/api/grid-history/' + dataset + '/' + latlon.join('_'))
             .then((response) => response.json())
             .then((dataJSON) => {
+              if (dataset === 'era5_surface_runoff-hourly') {
+                dataJSON.data = processSurfaceRunoff(dataJSON.data);
+              }
               localStorage.setItem(
                 generateLocalStorageKey(dataset, latlon) + '-cache-version',
-                json['time last generated']
+                json[timeGeneratedKey(dataset)]
               );
               localStorage.setItem(
                 generateLocalStorageKey(dataset, latlon) + '-cache',

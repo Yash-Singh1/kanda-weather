@@ -16,6 +16,9 @@ import COORDINATES from '../data/latlon';
 import dashFormatDate from '../helpers/dashFormatDate';
 import extractDClimateDataTemperature from '../helpers/extractDClimateDataTemperature';
 import dispatchMultiple from '../helpers/dispatchMultiple';
+import generateLocalStorageKey from '../helpers/generateLocalStorageKey';
+import '../styles/Loader.css';
+import Badge from './Badge';
 
 function Dashboard({ query }) {
   let [tempDestroy, setTempDestroy] = useState(false);
@@ -83,7 +86,11 @@ function Dashboard({ query }) {
                     (stage === 'Morning' || stage === 'Afternoon'
                       ? 'day'
                       : 'night' + (foggy ? '' : '-alt')) +
-                    (foggy ? '-fog' : '-partly-cloudy')
+                    (foggy
+                      ? '-fog'
+                      : (stage === 'Morning' || stage === 'Afternoon'
+                          ? ''
+                          : '-partly') + '-cloudy')
                 : ''
             } font-size-50`}
           ></i>
@@ -105,10 +112,38 @@ function Dashboard({ query }) {
               ? LOCALES.partlyCloudy[language]
               : ''}
           </span>
+          <br />
+          {dclimateData[
+            generateLocalStorageKey('cpcc_temp_max-daily', COORDINATES[query])
+          ] ? (
+            extractDClimateDataTemperature(dclimateData, date, query, 'max') >
+            40.5556 ? (
+              <Badge bg='warning'>{LOCALES.heatAdvisory[language]}</Badge>
+            ) : null
+          ) : null}
+          {dclimateData[
+            generateLocalStorageKey(
+              'era5_surface_runoff-hourly',
+              COORDINATES[query]
+            )
+          ] ? (
+            Object.keys(
+              dclimateData[
+                generateLocalStorageKey(
+                  'era5_surface_runoff-hourly',
+                  COORDINATES[query]
+                )
+              ]
+            ).find((surfaceRunoffDate) =>
+              surfaceRunoffDate.startsWith(dashFormatDate(date))
+            ) ? (
+              <Badge bg='primary'>{LOCALES.floodWarning[language]}</Badge>
+            ) : null
+          ) : null}
         </div>
       );
     },
-    [textData, language]
+    [textData, dclimateData, language]
   );
 
   const dispatch = dispatchMultiple(useDispatch());
@@ -118,7 +153,8 @@ function Dashboard({ query }) {
     matchMedia('(max-width: 768px)').onchange = () => forceRender({});
     dispatch(
       fetchDClimateData(COORDINATES[query], 'cpcc_temp_max-daily'),
-      fetchDClimateData(COORDINATES[query], 'cpcc_temp_min-daily')
+      fetchDClimateData(COORDINATES[query], 'cpcc_temp_min-daily'),
+      fetchDClimateData(COORDINATES[query], 'era5_surface_runoff-hourly')
     );
   }, []);
 
@@ -189,7 +225,18 @@ function Dashboard({ query }) {
                 id='thermometer-container'
                 className='col-md-3 col-sm-4 col-12 part-border'
               >
-                {Object.keys(dclimateData).length === 2 ? (
+                {dclimateData[
+                  generateLocalStorageKey(
+                    'cpcc_temp_min-daily',
+                    COORDINATES[query]
+                  )
+                ] &&
+                dclimateData[
+                  generateLocalStorageKey(
+                    'cpcc_temp_max-daily',
+                    COORDINATES[query]
+                  )
+                ] ? (
                   <Thermometer
                     theme={darkMode ? 'dark' : 'light'}
                     minTemp={extractDClimateDataTemperature(
@@ -227,7 +274,7 @@ function Dashboard({ query }) {
                     maxTempLabel={LOCALES.high[language]}
                   />
                 ) : (
-                  <div>Loading...</div>
+                  <span className='loader'></span>
                 )}
               </div>
               <div className='col-md-9 col-sm-8 col-12'>
