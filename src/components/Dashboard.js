@@ -126,7 +126,7 @@ function Dashboard({ query }) {
               'era5_surface_runoff-hourly',
               COORDINATES[query]
             )
-          ] ? (
+          ] && raining ? (
             Object.keys(
               dclimateData[
                 generateLocalStorageKey(
