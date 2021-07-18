@@ -19,7 +19,7 @@ class Thermometer extends Component {
       height: `${this.options.maxPercent() - this.options.minPercent()}%`,
       bottom: `${this.options.minPercent()}%`
     };
-    const currentBottom = {
+    const averageBottom = {
       bottom: `${
         ((this.options.percent() - this.options.minPercent()) /
           (this.options.maxPercent() - this.options.minPercent())) *
@@ -43,8 +43,8 @@ class Thermometer extends Component {
             <div className='thermometer__percent-max'>
               {this.options.maxTempLabel}: {maxstr}
             </div>
-            <div className='thermometer__percent-current' style={currentBottom}>
-              {this.options.currentTempLabel}: {valstr}
+            <div className='thermometer__percent-average' style={averageBottom}>
+              {this.options.averageTempLabel}: {valstr}
             </div>
             <div className='thermometer__mask'>
               <div
@@ -84,7 +84,7 @@ class Thermometer extends Component {
       minPercent: () => (this.options.minTemp / this.options.max) * 100,
       maxPercent: () => (this.options.maxTemp / this.options.max) * 100,
       reverseGradient: this.props.reverseGradient || false, // default false,
-      currentTempLabel: this.props.currentTempLabel || 'Current',
+      averageTempLabel: this.props.averageTempLabel || 'Average',
       minTempLabel: this.props.minTempLabel || 'Low',
       maxTempLabel: this.props.maxTempLabel || 'High',
       intervals: []

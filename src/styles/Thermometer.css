@@ -8,8 +8,8 @@
 .thermometer .thermometer__percent-max:after,
 .thermometer .thermometer__percent-min:before,
 .thermometer .thermometer__percent-min:after,
-.thermometer .thermometer__percent-current:before,
-.thermometer .thermometer__percent-current:after,
+.thermometer .thermometer__percent-average:before,
+.thermometer .thermometer__percent-average:after,
 .thermometer .thermometer__draw-b:after,
 .thermometer__draw-bReverse:after,
 .thermometer .thermometer__draw-b:before,
@@ -26,7 +26,7 @@
 
 .thermometer .thermometer__percent-max,
 .thermometer .thermometer__percent-min,
-.thermometer .thermometer__percent-current {
+.thermometer .thermometer__percent-average {
   font-size: 10px;
   font-style: normal;
   font-weight: 500;
@@ -210,14 +210,14 @@
 
 .thermometer--theme-light .thermometer__percent-max,
 .thermometer--theme-light .thermometer__percent-min,
-.thermometer--theme-light .thermometer__percent-current {
+.thermometer--theme-light .thermometer__percent-average {
   color: #000;
   background-color: #fff;
 }
 
 .thermometer--theme-light .thermometer__percent-max:after,
 .thermometer--theme-light .thermometer__percent-min:after,
-.thermometer--theme-light .thermometer__percent-current:after {
+.thermometer--theme-light .thermometer__percent-average:after {
   border-left: 8px solid #fff;
 }
 
@@ -241,14 +241,14 @@
 
 .thermometer--theme-dark .thermometer__percent-max,
 .thermometer--theme-dark .thermometer__percent-min,
-.thermometer--theme-dark .thermometer__percent-current {
+.thermometer--theme-dark .thermometer__percent-average {
   color: #fff;
   background-color: #1d1d1d;
 }
 
 .thermometer--theme-dark .thermometer__percent-max:after,
 .thermometer--theme-dark .thermometer__percent-min:after,
-.thermometer--theme-dark .thermometer__percent-current:after {
+.thermometer--theme-dark .thermometer__percent-average:after {
   border-left: 8px solid #1d1d1d;
 }
 
@@ -353,7 +353,7 @@
 
 .thermometer .thermometer__percent-min,
 .thermometer .thermometer__percent-max,
-.thermometer .thermometer__percent-current {
+.thermometer .thermometer__percent-average {
   position: absolute;
   right: initial;
   left: 0;
@@ -365,7 +365,7 @@
 
 .thermometer .thermometer__percent-min:hover,
 .thermometer .thermometer__percent-max:hover,
-.thermometer .thermometer__percent-current:hover {
+.thermometer .thermometer__percent-average:hover {
   z-index: 10;
 }
 
@@ -374,16 +374,16 @@
   transform: translateX(calc(-100% - 8px)) translateY(-50%);
 }
 
-.thermometer .thermometer__percent-current {
-  transform: translateX(calc(-100% - 8px)) translateY(50%);
+.thermometer .thermometer__percent-average {
+  transform: translateX(calc(-100% - 8px)) translateY(55%);
 }
 
 .thermometer .thermometer__percent-max:before,
 .thermometer .thermometer__percent-max:after,
 .thermometer .thermometer__percent-min:before,
 .thermometer .thermometer__percent-min:after,
-.thermometer .thermometer__percent-current:before,
-.thermometer .thermometer__percent-current:after {
+.thermometer .thermometer__percent-average:before,
+.thermometer .thermometer__percent-average:after {
   position: absolute;
   top: 0;
   right: 0;
@@ -395,7 +395,7 @@
 
 .thermometer .thermometer__percent-max:after,
 .thermometer .thermometer__percent-min:after,
-.thermometer .thermometer__percent-current:after {
+.thermometer .thermometer__percent-average:after {
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
   transform: translateX(calc(100% - 2px)) translateY(0);
@@ -403,7 +403,7 @@
 
 .thermometer .thermometer__percent-max:before,
 .thermometer .thermometer__percent-min:before,
-.thermometer .thermometer__percent-current:before {
+.thermometer .thermometer__percent-average:before {
   border-left: 8px solid rgba(0, 0, 0, 0.1);
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;

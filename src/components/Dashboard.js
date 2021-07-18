@@ -288,7 +288,7 @@ function Dashboard({ query }) {
                         : '300'
                     }
                     minTempLabel={LOCALES.low[language]}
-                    currentTempLabel={LOCALES.current[language]}
+                    averageTempLabel={LOCALES.average[language]}
                     maxTempLabel={LOCALES.high[language]}
                   />
                 ) : (

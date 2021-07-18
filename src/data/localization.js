@@ -169,11 +169,11 @@ const LOCALES = {
     Yoruba: 'Kekere',
     Swahili: 'Chini'
   },
-  current: {
-    English: 'Current',
-    French: 'Actuel',
-    Yoruba: 'Lọwọlọwọ',
-    Swahili: 'Sasa'
+  average: {
+    English: 'Average',
+    French: 'Moyenne',
+    Yoruba: 'Agbede',
+    Swahili: 'Wastani'
   },
   high: {
     English: 'High',
@@ -187,10 +187,10 @@ const LOCALES = {
     Yoruba: 'Ikilo Ooru',
     Swahili: 'Onyo la joto'
   },
-  floodWarning: {
-    English: 'Flood Warning',
-    French: "Avertissement d'inondation",
-    Yoruba: 'Ikilọ ikun omi',
+  floodRisk: {
+    English: 'Flood Risk',
+    French: "Risque d'inondation",
+    Yoruba: 'Ewu Ekun omi',
     Swahili: 'Onyo la Mafuriko'
   }
 };
