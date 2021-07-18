@@ -8,8 +8,6 @@ import filterData from '../helpers/filterData';
 import parseHeaders from 'parse-headers';
 import patchQuestionIcon from 'url:bootstrap-icons/icons/patch-question.svg';
 import { fetchDClimateData, setDate } from '../actions';
-import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
-import ProgressProvider from './ProgressProvider';
 import 'react-circular-progressbar/dist/styles.css';
 import Thermometer from './Thermometer';
 import COORDINATES from '../data/latlon';
@@ -20,6 +18,7 @@ import generateLocalStorageKey from '../helpers/generateLocalStorageKey';
 import '../styles/Loader.css';
 import Badge from './Badge';
 import findHour from '../helpers/findHour';
+import ProgressRing from './ProgressRing';
 
 function Dashboard({ query }) {
   let [tempDestroy, setTempDestroy] = useState(false);
@@ -316,36 +315,16 @@ function Dashboard({ query }) {
                   )}
                 </div>
                 <div id='progress-ring-row' className='row part-border'>
-                  <div className='col-6'>
-                    <div className='mx-auto progress-ring'>
-                      <ProgressProvider
-                        valueStart={10}
-                        valueEnd={parseFloat(
-                          textData['chance of rain'].slice(0, -1)
-                        )}
-                      >
-                        {(value) => (
-                          <CircularProgressbarWithChildren
-                            value={value}
-                          >{`${LOCALES.chanceOfRain[language]}: ${value}%`}</CircularProgressbarWithChildren>
-                        )}
-                      </ProgressProvider>
-                    </div>
-                  </div>
-                  <div className='col-6'>
-                    <div className='mx-auto progress-ring'>
-                      <ProgressProvider
-                        valueStart={0}
-                        valueEnd={parseFloat(textData.humidity.slice(0, -1))}
-                      >
-                        {(value) => (
-                          <CircularProgressbarWithChildren
-                            value={value}
-                          >{`${LOCALES.humidity[language]}: ${value}%`}</CircularProgressbarWithChildren>
-                        )}
-                      </ProgressProvider>
-                    </div>
-                  </div>
+                  <ProgressRing
+                    label={LOCALES.chanceOfRain[language]}
+                    valueEnd={parseFloat(
+                      textData['chance of rain'].slice(0, -1)
+                    )}
+                  />
+                  <ProgressRing
+                    label={LOCALES.humidity[language]}
+                    valueEnd={parseFloat(textData.humidity.slice(0, -1))}
+                  />
                 </div>
               </div>
             </div>
