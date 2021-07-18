@@ -154,7 +154,11 @@ function Dashboard({ query }) {
     dispatch(
       fetchDClimateData(COORDINATES[query], 'cpcc_temp_max-daily'),
       fetchDClimateData(COORDINATES[query], 'cpcc_temp_min-daily'),
-      fetchDClimateData(COORDINATES[query], 'era5_surface_runoff-hourly')
+      fetchDClimateData(COORDINATES[query], 'era5_surface_runoff-hourly'),
+      fetchDClimateData(
+        COORDINATES[query],
+        'era5_volumetric_soil_water_layer_1-hourly'
+      )
     );
   }, []);
 

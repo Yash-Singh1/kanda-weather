@@ -1,6 +1,5 @@
 import generateLocalStorageKey from '../helpers/generateLocalStorageKey';
 import processSurfaceRunoff from '../helpers/processSurfaceRunoff';
-import timeGeneratedKey from '../helpers/timeGeneratedKey';
 
 export const RECIEVE_DCLIMATE_DATA = 'RECIEVE_DCLIMATE_DATA';
 
@@ -19,7 +18,7 @@ export function fetchDClimateData(latlon, dataset) {
       .then((response) => response.json())
       .then((json) => {
         if (
-          json[timeGeneratedKey(dataset)] !==
+          json['time last generated'] !==
           localStorage.getItem(
             generateLocalStorageKey(dataset, latlon) + '-cache-version'
           )
@@ -29,10 +28,13 @@ export function fetchDClimateData(latlon, dataset) {
             .then((dataJSON) => {
               if (dataset === 'era5_surface_runoff-hourly') {
                 dataJSON.data = processSurfaceRunoff(dataJSON.data);
+              } else if (
+                dataset === 'era5_volumetric_soil_water_layer_1-hourly'
+              ) {
               }
               localStorage.setItem(
                 generateLocalStorageKey(dataset, latlon) + '-cache-version',
-                json[timeGeneratedKey(dataset)]
+                json['time last generated']
               );
               localStorage.setItem(
                 generateLocalStorageKey(dataset, latlon) + '-cache',
