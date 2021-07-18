@@ -19,6 +19,7 @@ import dispatchMultiple from '../helpers/dispatchMultiple';
 import generateLocalStorageKey from '../helpers/generateLocalStorageKey';
 import '../styles/Loader.css';
 import Badge from './Badge';
+import findHour from '../helpers/findHour';
 
 function Dashboard({ query }) {
   let [tempDestroy, setTempDestroy] = useState(false);
@@ -128,25 +129,11 @@ function Dashboard({ query }) {
                 COORDINATES[query]
               )
             ] ? (
-              dclimateData[
-                generateLocalStorageKey(
-                  'era5_surface_runoff-hourly',
-                  COORDINATES[query]
-                )
-              ].find(
-                (surfaceRunoffDate) =>
-                  surfaceRunoffDate.startsWith(dashFormatDate(date)) &&
-                  new RegExp(
-                    String.raw`^\d{4}-\d{2}-\d{2} ${
-                      stage === 'Morning'
-                        ? '(0[1-9]|11)'
-                        : stage === 'Afternoon'
-                        ? '(1[2-6])'
-                        : stage === 'Evening'
-                        ? '(1[7-9]|20)'
-                        : '(2[1-4])'
-                    }`
-                  ).test(surfaceRunoffDate)
+              findHour(
+                dclimateData,
+                'era5_surface_runoff-hourly',
+                query,
+                date
               ) ? (
                 <Badge bg='primary'>{LOCALES.floodWarning[language]}</Badge>
               ) : null
@@ -156,25 +143,11 @@ function Dashboard({ query }) {
                   COORDINATES[query]
                 )
               ] ? (
-              dclimateData[
-                generateLocalStorageKey(
-                  'era5_volumetric_soil_water_layer_1-hourly',
-                  COORDINATES[query]
-                )
-              ].find(
-                (surfaceRunoffDate) =>
-                  surfaceRunoffDate.startsWith(dashFormatDate(date)) &&
-                  new RegExp(
-                    String.raw`^\d{4}-\d{2}-\d{2} ${
-                      stage === 'Morning'
-                        ? '(0[1-9]|11)'
-                        : stage === 'Afternoon'
-                        ? '(1[2-6])'
-                        : stage === 'Evening'
-                        ? '(1[7-9]|20)'
-                        : '(2[1-4])'
-                    }`
-                  ).test(surfaceRunoffDate)
+              findHour(
+                dclimateData,
+                'era5_volumetric_soil_water_layer_1-hourly',
+                query,
+                date
               ) ? (
                 <Badge bg='primary'>{LOCALES.floodWarning[language]}</Badge>
               ) : null
