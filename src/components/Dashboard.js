@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, InputGroup, FormControl } from 'react-bootstrap';
+import {
+  Button,
+  InputGroup,
+  FormControl,
+  Container,
+  Row,
+  Col
+} from 'react-bootstrap';
 import formatDate from '../helpers/formatDate';
 import { useDispatch, useSelector } from 'react-redux';
 import 'weathericons/css/weather-icons.min.css';
@@ -45,11 +52,10 @@ function Dashboard({ query }) {
       const raining = parseFloat(textData['chance of rain'].slice(0, -1)) >= 60;
       const foggy = parseFloat(textData.humidity.slice(0, -1)) >= 95;
       return (
-        <div
+        <Col
           key={index}
-          className={`col-${
-            matchMedia('(max-width: 576px)').matches ? 6 : 3
-          } mx-auto`}
+          xs={matchMedia('(max-width: 576px)').matches ? 6 : 3}
+          className='mx-auto'
         >
           <span className='text-nowrap'>{LOCALES[stage][language]}</span>
           <br />
@@ -152,7 +158,7 @@ function Dashboard({ query }) {
               ) : null
             ) : null
           ) : null}
-        </div>
+        </Col>
       );
     },
     [textData, dclimateData, language]
@@ -236,100 +242,93 @@ function Dashboard({ query }) {
           <span>{LOCALES.noData[language]}</span>
         </div>
       ) : (
-        <>
-          <div className='container-fluid' data-aos='fade-up'>
-            <div className='row'>
-              <div
-                id='thermometer-container'
-                className='col-md-3 col-sm-4 col-12 part-border'
-              >
-                {dclimateData[
-                  generateLocalStorageKey(
-                    'cpcc_temp_min-daily',
-                    COORDINATES[query]
-                  )
-                ] &&
-                dclimateData[
-                  generateLocalStorageKey(
-                    'cpcc_temp_max-daily',
-                    COORDINATES[query]
-                  )
-                ] ? (
-                  <Thermometer
-                    theme={darkMode ? 'dark' : 'light'}
-                    minTemp={extractDClimateDataTemperature(
-                      dclimateData,
-                      date,
-                      query,
-                      'min'
-                    )}
-                    value={textData.temperature.slice(0, -1)}
-                    maxTemp={extractDClimateDataTemperature(
-                      dclimateData,
-                      date,
-                      query,
-                      'max'
-                    )}
-                    max='50'
-                    steps='3'
-                    format='°C'
-                    size={
-                      matchMedia('(max-width: 576px)').matches
-                        ? 'small'
-                        : matchMedia('(max-width: 768px)').matches
-                        ? 'normal'
-                        : 'large'
-                    }
-                    height={
-                      matchMedia('(max-width: 576px)').matches
-                        ? '200'
-                        : matchMedia('(max-width: 768px)').matches
-                        ? '250'
-                        : '300'
-                    }
-                    minTempLabel={LOCALES.low[language]}
-                    averageTempLabel={LOCALES.average[language]}
-                    maxTempLabel={LOCALES.high[language]}
-                  />
-                ) : (
-                  <span className='loader'></span>
-                )}
-              </div>
-              <div className='col-md-9 col-sm-8 col-12'>
-                <div id='preview-icons' className='row part-border'>
-                  {matchMedia('(max-width: 576px)').matches ? (
-                    <>
-                      <div className='col-12'>
-                        <div className='row'>
-                          {['Morning', 'Afternoon'].map(processWeather)}
-                        </div>
-                        <div className='row'>
-                          {['Evening', 'Night'].map(processWeather)}
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    ['Morning', 'Afternoon', 'Evening', 'Night'].map(
-                      processWeather
-                    )
+        <Container fluid data-aos='fade-up'>
+          <Row>
+            <Col
+              id='thermometer-container'
+              md={3}
+              sm={4}
+              xs={12}
+              className='part-border'
+            >
+              {dclimateData[
+                generateLocalStorageKey(
+                  'cpcc_temp_min-daily',
+                  COORDINATES[query]
+                )
+              ] &&
+              dclimateData[
+                generateLocalStorageKey(
+                  'cpcc_temp_max-daily',
+                  COORDINATES[query]
+                )
+              ] ? (
+                <Thermometer
+                  theme={darkMode ? 'dark' : 'light'}
+                  minTemp={extractDClimateDataTemperature(
+                    dclimateData,
+                    date,
+                    query,
+                    'min'
                   )}
-                </div>
-                <div id='progress-ring-row' className='row part-border'>
-                  <ProgressRing
-                    label={LOCALES.chanceOfRain[language]}
-                    valueEnd={parseFloat(
-                      textData['chance of rain'].slice(0, -1)
-                    )}
-                  />
-                  <ProgressRing
-                    label={LOCALES.humidity[language]}
-                    valueEnd={parseFloat(textData.humidity.slice(0, -1))}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
+                  value={textData.temperature.slice(0, -1)}
+                  maxTemp={extractDClimateDataTemperature(
+                    dclimateData,
+                    date,
+                    query,
+                    'max'
+                  )}
+                  max='50'
+                  steps='3'
+                  format='°C'
+                  size={
+                    matchMedia('(max-width: 576px)').matches
+                      ? 'small'
+                      : matchMedia('(max-width: 768px)').matches
+                      ? 'normal'
+                      : 'large'
+                  }
+                  height={
+                    matchMedia('(max-width: 576px)').matches
+                      ? '200'
+                      : matchMedia('(max-width: 768px)').matches
+                      ? '250'
+                      : '300'
+                  }
+                  minTempLabel={LOCALES.low[language]}
+                  averageTempLabel={LOCALES.average[language]}
+                  maxTempLabel={LOCALES.high[language]}
+                />
+              ) : (
+                <span className='loader'></span>
+              )}
+            </Col>
+            <Col md={9} sm={8} xs={12}>
+              <Row id='preview-icons' className='part-border'>
+                {matchMedia('(max-width: 576px)').matches ? (
+                  <Col xs={12}>
+                    <Row>{['Morning', 'Afternoon'].map(processWeather)}</Row>
+                    <Row>{['Evening', 'Night'].map(processWeather)}</Row>
+                  </Col>
+                ) : (
+                  ['Morning', 'Afternoon', 'Evening', 'Night'].map(
+                    processWeather
+                  )
+                )}
+              </Row>
+              <Row id='progress-ring-row' className='part-border'>
+                <ProgressRing
+                  label={LOCALES.chanceOfRain[language]}
+                  valueEnd={parseFloat(textData['chance of rain'].slice(0, -1))}
+                />
+                <ProgressRing
+                  label={LOCALES.humidity[language]}
+                  valueEnd={parseFloat(textData.humidity.slice(0, -1))}
+                />
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       )}
     </div>
   );

@@ -1,10 +1,11 @@
 import React from 'react';
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import ProgressProvider from './ProgressProvider';
+import { Col } from 'react-bootstrap';
 
 function ProgressRing({ label, valueEnd }) {
   return (
-    <div className='col-6'>
+    <Col xs={6}>
       <div className='mx-auto progress-ring'>
         <ProgressProvider valueStart={10} valueEnd={valueEnd}>
           {(value) => (
@@ -14,7 +15,7 @@ function ProgressRing({ label, valueEnd }) {
           )}
         </ProgressProvider>
       </div>
-    </div>
+    </Col>
   );
 }
 
