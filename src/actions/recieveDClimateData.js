@@ -1,5 +1,7 @@
 import generateLocalStorageKey from '../helpers/generateLocalStorageKey';
+import processSoilMoisture from '../helpers/processSoilMoisture';
 import processSurfaceRunoff from '../helpers/processSurfaceRunoff';
+import processWind from '../helpers/processWind';
 
 export const RECIEVE_DCLIMATE_DATA = 'RECIEVE_DCLIMATE_DATA';
 
@@ -18,7 +20,9 @@ export function fetchDClimateData(latlon, dataset) {
       .then((response) => response.json())
       .then((json) => {
         if (
-          json['time last generated'] !==
+          (json['time last generated']
+            ? json['time last generated']
+            : json['time generated']) !==
           localStorage.getItem(
             generateLocalStorageKey(dataset, latlon) + '-cache-version'
           )
@@ -31,14 +35,24 @@ export function fetchDClimateData(latlon, dataset) {
               } else if (
                 dataset === 'era5_volumetric_soil_water_layer_1-hourly'
               ) {
+                dataJSON.data = processSoilMoisture(dataJSON.data);
+              } else if (
+                dataset === 'era5_land_wind_u-hourly' ||
+                dataset === 'era5_land_wind_v-hourly'
+              ) {
+                dataJSON.data = processWind(dataJSON.data);
               }
               localStorage.setItem(
                 generateLocalStorageKey(dataset, latlon) + '-cache-version',
                 json['time last generated']
+                  ? json['time last generated']
+                  : json['time generated']
               );
               localStorage.setItem(
                 generateLocalStorageKey(dataset, latlon) + '-cache',
-                JSON.stringify(dataJSON.data)
+                dataset.endsWith('-hourly')
+                  ? dataJSON.data
+                  : JSON.stringify(dataJSON.data)
               );
               dispatch(recieveDClimateData(dataJSON, latlon, dataset));
             });
@@ -46,11 +60,13 @@ export function fetchDClimateData(latlon, dataset) {
           dispatch(
             recieveDClimateData(
               {
-                data: JSON.parse(
-                  localStorage.getItem(
-                    generateLocalStorageKey(dataset, latlon) + '-cache'
-                  )
-                )
+                data: dataset.endsWith('hourly')
+                  ? dataset.split(',')
+                  : JSON.parse(
+                      localStorage.getItem(
+                        generateLocalStorageKey(dataset, latlon) + '-cache'
+                      )
+                    )
               },
               latlon,
               dataset

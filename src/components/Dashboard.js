@@ -121,23 +121,63 @@ function Dashboard({ query }) {
               <Badge bg='warning'>{LOCALES.heatAdvisory[language]}</Badge>
             ) : null
           ) : null}
-          {dclimateData[
-            generateLocalStorageKey(
-              'era5_surface_runoff-hourly',
-              COORDINATES[query]
-            )
-          ] && raining ? (
-            Object.keys(
+          {raining ? (
+            dclimateData[
+              generateLocalStorageKey(
+                'era5_surface_runoff-hourly',
+                COORDINATES[query]
+              )
+            ] ? (
               dclimateData[
                 generateLocalStorageKey(
                   'era5_surface_runoff-hourly',
                   COORDINATES[query]
                 )
-              ]
-            ).find((surfaceRunoffDate) =>
-              surfaceRunoffDate.startsWith(dashFormatDate(date))
-            ) ? (
-              <Badge bg='primary'>{LOCALES.floodWarning[language]}</Badge>
+              ].find(
+                (surfaceRunoffDate) =>
+                  surfaceRunoffDate.startsWith(dashFormatDate(date)) &&
+                  new RegExp(
+                    String.raw`^\d{4}-\d{2}-\d{2} ${
+                      stage === 'Morning'
+                        ? '(0[1-9]|11)'
+                        : stage === 'Afternoon'
+                        ? '(1[2-6])'
+                        : stage === 'Evening'
+                        ? '(1[7-9]|20)'
+                        : '(2[1-4])'
+                    }`
+                  ).test(surfaceRunoffDate)
+              ) ? (
+                <Badge bg='primary'>{LOCALES.floodWarning[language]}</Badge>
+              ) : null
+            ) : dclimateData[
+                generateLocalStorageKey(
+                  'era5_volumetric_soil_water_layer_1-hourly',
+                  COORDINATES[query]
+                )
+              ] ? (
+              dclimateData[
+                generateLocalStorageKey(
+                  'era5_volumetric_soil_water_layer_1-hourly',
+                  COORDINATES[query]
+                )
+              ].find(
+                (surfaceRunoffDate) =>
+                  surfaceRunoffDate.startsWith(dashFormatDate(date)) &&
+                  new RegExp(
+                    String.raw`^\d{4}-\d{2}-\d{2} ${
+                      stage === 'Morning'
+                        ? '(0[1-9]|11)'
+                        : stage === 'Afternoon'
+                        ? '(1[2-6])'
+                        : stage === 'Evening'
+                        ? '(1[7-9]|20)'
+                        : '(2[1-4])'
+                    }`
+                  ).test(surfaceRunoffDate)
+              ) ? (
+                <Badge bg='primary'>{LOCALES.floodWarning[language]}</Badge>
+              ) : null
             ) : null
           ) : null}
         </div>
@@ -158,7 +198,9 @@ function Dashboard({ query }) {
       fetchDClimateData(
         COORDINATES[query],
         'era5_volumetric_soil_water_layer_1-hourly'
-      )
+      ),
+      fetchDClimateData(COORDINATES[query], 'era5_land_wind_u-hourly'),
+      fetchDClimateData(COORDINATES[query], 'era5_land_wind_v-hourly')
     );
   }, []);
 
