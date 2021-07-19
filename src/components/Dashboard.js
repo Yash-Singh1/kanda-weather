@@ -26,11 +26,12 @@ import '../styles/Loader.css';
 import Badge from './Badge';
 import findHour from '../helpers/findHour';
 import ProgressRing from './ProgressRing';
+import { useRefresh } from 'react-tidy';
 
 function Dashboard({ query }) {
   let [tempDestroy, setTempDestroy] = useState(false);
   let [firstTime, setFirstTime] = useState(true);
-  const [, forceRender] = useState({});
+  const refresh = useRefresh();
 
   const date = useSelector((state) => state.date);
   const textData = parseHeaders(
@@ -224,8 +225,8 @@ function Dashboard({ query }) {
   const dispatch = dispatchMultiple(useDispatch());
 
   useEffect(() => {
-    matchMedia('(max-width: 576px)').onchange = () => forceRender({});
-    matchMedia('(max-width: 768px)').onchange = () => forceRender({});
+    matchMedia('(max-width: 576px)').onchange = refresh;
+    matchMedia('(max-width: 768px)').onchange = refresh;
     dispatch(
       fetchDClimateData(COORDINATES[query], 'cpcc_temp_max-daily'),
       fetchDClimateData(COORDINATES[query], 'cpcc_temp_min-daily'),
