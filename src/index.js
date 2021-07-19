@@ -32,10 +32,9 @@ render(
     if (store.getState().darkMode) {
       link.href = 'https://bootswatch.com/5/darkly/bootstrap.min.css';
       document.body.classList.add('dark');
-    } else {
+    } else
       link.href =
         'https://unpkg.com/bootstrap@5.0.2/dist/css/bootstrap.min.css';
-    }
 
     document.querySelector('link[rel="stylesheet"]').before(link);
   }

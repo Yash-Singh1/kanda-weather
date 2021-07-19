@@ -222,11 +222,16 @@ function Dashboard({ query }) {
     [textData, dclimateData, language]
   );
 
-  const dispatch = dispatchMultiple(useDispatch(), useIsMounted());
+  const isMounted = useIsMounted();
+
+  const dispatch = dispatchMultiple(useDispatch(), isMounted);
 
   useEffect(() => {
-    matchMedia('(max-width: 576px)').onchange = refresh;
-    matchMedia('(max-width: 768px)').onchange = refresh;
+    const refreshMediaCallback = () => {
+      if (isMounted()) refresh();
+    };
+    matchMedia('(max-width: 576px)').onchange = refreshMediaCallback;
+    matchMedia('(max-width: 768px)').onchange = refreshMediaCallback;
     dispatch(
       fetchDClimateData(COORDINATES[query], 'cpcc_temp_max-daily'),
       fetchDClimateData(COORDINATES[query], 'cpcc_temp_min-daily'),

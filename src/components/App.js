@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setTextData, setQuery } from '../actions';
 import LOCALES from '../data/localization';
 import QUERIES from '../data/queries';
+import { useIsMounted } from 'react-tidy';
 
 function App() {
   let [searchValue, setSearchValue] = useState([
@@ -28,11 +29,14 @@ function App() {
   const query = useSelector((state) => state.query);
   const language = useSelector((state) => state.language);
 
+  const isMounted = useIsMounted();
+
   useEffect(() => {
     if (
       query === '' &&
       new URLSearchParams(location.search).get('q') &&
-      new URLSearchParams(location.search).get('q') !== ''
+      new URLSearchParams(location.search).get('q') !== '' &&
+      isMounted()
     ) {
       location.search = '?date=' + formatDate(date);
     }
@@ -46,21 +50,19 @@ function App() {
   useEffect(() => {
     fetch(forecast)
       .then((response) => response.text())
-      .then((text) =>
-        dispatch(setTextData(text.split('\n'.repeat(4)), 'text'))
-      );
+      .then((text) => {
+        if (isMounted())
+          dispatch(setTextData(text.split('\n'.repeat(4)), 'text'));
+      });
   }, []);
 
   function redirectSearch() {
     if (searchValue.length === 0 && inputValue === '') {
-      if (!new URLSearchParams(location.search).get('q')) {
-        return;
-      }
+      if (!new URLSearchParams(location.search).get('q')) return;
       dispatch(setQuery(''));
     }
-    if (searchValue[0] === new URLSearchParams(location.search).get('q')) {
+    if (searchValue[0] === new URLSearchParams(location.search).get('q'))
       return;
-    }
     location.search =
       '?q=' +
       encodeURIComponent(searchValue[0] || inputValue) +

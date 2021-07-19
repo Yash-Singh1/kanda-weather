@@ -7,8 +7,6 @@ module.exports = function (app) {
         .then((response) => response.json())
         .then((json) => res.end(JSON.stringify(json)));
       return;
-    } else {
-      return next();
-    }
+    } else return next();
   });
 };
