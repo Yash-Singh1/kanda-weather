@@ -3,6 +3,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { useIsMounted } from 'react-tidy';
 
 // If you don't have a version of React that supports
 // hooks, you can use a class-based version of this
@@ -10,10 +11,16 @@ import { useEffect, useState } from 'react';
 const ProgressProvider = ({ valueStart, valueEnd, children }) => {
   const [value, setValue] = useState(valueStart);
   const [timeouts, setTimeouts] = useState([]);
+  const isMounted = useIsMounted();
 
   useEffect(() => {
     if (value !== valueEnd) {
-      setTimeouts([...timeouts, setTimeout(() => setValue(value + 1), 15)]);
+      setTimeouts([
+        ...timeouts,
+        setTimeout(() => {
+          if (isMounted()) setValue(value + 1);
+        }, 15)
+      ]);
     }
 
     return () => timeouts.forEach(clearTimeout);
