@@ -51,6 +51,56 @@ function Dashboard({ query }) {
         parseFloat(textData.wind.split(' at ')[1].split(' ')[0]) >= 20;
       const raining = parseFloat(textData['chance of rain'].slice(0, -1)) >= 60;
       const foggy = parseFloat(textData.humidity.slice(0, -1)) >= 95;
+      let airQuality = 2;
+      if (
+        dclimateData[
+          generateLocalStorageKey('era5_land_wind_u-hourly', COORDINATES[query])
+        ] &&
+        dclimateData[
+          generateLocalStorageKey('era5_land_wind_v-hourly', COORDINATES[query])
+        ] &&
+        (!(
+          dclimateData[
+            generateLocalStorageKey(
+              'era5_land_wind_v-hourly',
+              COORDINATES[query]
+            )
+          ].filter((windVComp) =>
+            [
+              dashFormatDate(
+                new Date(new Date(date.getTime()).setDate(date.getDate() - 2))
+              ),
+              dashFormatDate(
+                new Date(new Date(date.getTime()).setDate(date.getDate() - 1))
+              ),
+              dashFormatDate(date)
+            ].includes(windVComp.split(' ')[0])
+          ).length > 2
+        ) ||
+          !(
+            dclimateData[
+              generateLocalStorageKey(
+                'era5_land_wind_u-hourly',
+                COORDINATES[query]
+              )
+            ].filter((windVComp) =>
+              [
+                dashFormatDate(
+                  new Date(new Date(date.getTime()).setDate(date.getDate() - 2))
+                ),
+                dashFormatDate(
+                  new Date(new Date(date.getTime()).setDate(date.getDate() - 1))
+                ),
+                dashFormatDate(date)
+              ].includes(windVComp.split(' ')[0])
+            ).length > 2
+          ))
+      ) {
+        airQuality -= 1;
+      }
+      if (foggy && textData.condition === 'Cloudy') {
+        airQuality -= 1;
+      }
       return (
         <Col
           key={index}
@@ -157,6 +207,9 @@ function Dashboard({ query }) {
                 <Badge bg='primary'>{LOCALES.floodWarning[language]}</Badge>
               ) : null
             ) : null
+          ) : null}
+          {airQuality === 0 ? (
+            <Badge bg='secondary'>Poor Air Quality</Badge>
           ) : null}
         </Col>
       );
