@@ -226,10 +226,11 @@ function Dashboard({ query }) {
 
   const dispatch = dispatchMultiple(useDispatch(), isMounted);
 
+  const refreshMediaCallback = useCallback(() => {
+    if (isMounted()) refresh();
+  }, [isMounted]);
+
   useEffect(() => {
-    const refreshMediaCallback = () => {
-      if (isMounted()) refresh();
-    };
     matchMedia('(max-width: 576px)').onchange = refreshMediaCallback;
     matchMedia('(max-width: 768px)').onchange = refreshMediaCallback;
     dispatch(
