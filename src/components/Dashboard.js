@@ -26,7 +26,7 @@ import '../styles/Loader.css';
 import Badge from './Badge';
 import findHour from '../helpers/findHour';
 import ProgressRing from './ProgressRing';
-import { useRefresh } from 'react-tidy';
+import { useIsMounted, useRefresh } from 'react-tidy';
 
 function Dashboard({ query }) {
   let [tempDestroy, setTempDestroy] = useState(false);
@@ -222,7 +222,7 @@ function Dashboard({ query }) {
     [textData, dclimateData, language]
   );
 
-  const dispatch = dispatchMultiple(useDispatch());
+  const dispatch = dispatchMultiple(useDispatch(), useIsMounted());
 
   useEffect(() => {
     matchMedia('(max-width: 576px)').onchange = refresh;
