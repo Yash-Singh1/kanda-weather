@@ -78,7 +78,7 @@ function App() {
             <Typeahead
               id='search-bar'
               options={
-                textData.length !== 0
+                textData.length > 0
                   ? [
                       ...new Set(
                         textData.map((datapoint) => datapoint.split(': ')[0])
@@ -107,7 +107,7 @@ function App() {
       </Form>
 
       {query ? (
-        textData.length !== 0 ? (
+        textData.length > 0 ? (
           Object.values(QUERIES).find((queryMatcher) => queryMatcher(query)) ? (
             <Dashboard
               query={

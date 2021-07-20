@@ -30,17 +30,17 @@ export function fetchDClimateData(latlon, dataset) {
           fetch('/api/grid-history/' + dataset + '/' + latlon.join('_'))
             .then((response) => response.json())
             .then((dataJSON) => {
-              if (dataset === 'era5_surface_runoff-hourly') {
-                dataJSON.data = processSurfaceRunoff(dataJSON.data);
-              } else if (
-                dataset === 'era5_volumetric_soil_water_layer_1-hourly'
-              ) {
-                dataJSON.data = processSoilMoisture(dataJSON.data);
-              } else if (
-                dataset === 'era5_land_wind_u-hourly' ||
-                dataset === 'era5_land_wind_v-hourly'
-              ) {
-                dataJSON.data = processWind(dataJSON.data);
+              switch (dataset) {
+                case 'era5_surface_runoff-hourly':
+                  dataJSON.data = processSurfaceRunoff(dataJSON.data);
+                  break;
+                case 'era5_volumetric_soil_water_layer_1-hourly':
+                  dataJSON.data = processSoilMoisture(dataJSON.data);
+                  break;
+                case 'era5_land_wind_u-hourly':
+                case 'era5_land_wind_v-hourly':
+                  dataJSON.data = processWind(dataJSON.data);
+                  break;
               }
               localStorage.setItem(
                 generateLocalStorageKey(dataset, latlon) + '-cache-version',

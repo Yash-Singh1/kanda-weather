@@ -34,9 +34,10 @@ import {
   RAINING_MIN_CHANCE,
   WINDY_MIN_SPEED
 } from '../data/magicNumbers';
+import PropTypes from 'prop-types';
 
 function Dashboard({ query }) {
-  let [tempDestroy, setTempDestroy] = useState(false);
+  let [temporaryDestroy, setTemporaryDestroy] = useState(false);
   let [firstTime, setFirstTime] = useState(true);
   const refresh = useRefresh();
 
@@ -56,13 +57,13 @@ function Dashboard({ query }) {
     (stage, index) => {
       const windy =
         textData.wind !== 'Unknown' &&
-        parseFloat(textData.wind.split(' at ')[1].split(' ')[0]) >=
+        Number.parseFloat(textData.wind.split(' at ')[1].split(' ')[0], 10) >=
           WINDY_MIN_SPEED;
       const raining =
-        parseFloat(textData['chance of rain'].slice(0, -1)) >=
+        Number.parseFloat(textData['chance of rain'].slice(0, -1), 10) >=
         RAINING_MIN_CHANCE;
       const foggy =
-        parseFloat(textData.humidity.slice(0, -1)) >= FOGGY_MIN_HUMIDITY;
+        Number.parseFloat(textData.humidity.slice(0, -1), 10) >= FOGGY_MIN_HUMIDITY;
 
       return (
         <Col
@@ -79,7 +80,7 @@ function Dashboard({ query }) {
                   (stage === 'Morning' || stage === 'Afternoon'
                     ? 'day-sunny'
                     : 'night-clear')
-                : textData.condition === 'Cloudy'
+                : (textData.condition === 'Cloudy'
                 ? raining
                   ? 'wi-' +
                     (stage === 'Morning' || stage === 'Afternoon'
@@ -110,16 +111,16 @@ function Dashboard({ query }) {
                       : (stage === 'Morning' || stage === 'Afternoon'
                           ? ''
                           : '-partly') + '-cloudy')
-                : ''
+                : '')
             } font-size-50`}
           ></i>
           <br />
           <span className='text-nowrap'>
             {textData.condition === 'Sunny'
-              ? stage === 'Morning' || stage === 'Afternoon'
+              ? (stage === 'Morning' || stage === 'Afternoon'
                 ? LOCALES.sunny[language]
-                : LOCALES.clear[language]
-              : foggy
+                : LOCALES.clear[language])
+              : (foggy
               ? LOCALES.foggy[language]
               : raining
               ? LOCALES.rain[language]
@@ -129,7 +130,7 @@ function Dashboard({ query }) {
               ? LOCALES.cloudy[language]
               : textData.condition === 'Partly Cloudy'
               ? LOCALES.partlyCloudy[language]
-              : ''}
+              : '')}
           </span>
           <br />
           {dclimateData[
@@ -151,7 +152,8 @@ function Dashboard({ query }) {
                 dclimateData,
                 'era5_surface_runoff-hourly',
                 query,
-                date
+                date,
+                stage
               ) ? (
                 <Badge bg='primary'>{LOCALES.floodWarning[language]}</Badge>
               ) : null
@@ -165,7 +167,8 @@ function Dashboard({ query }) {
                 dclimateData,
                 'era5_volumetric_soil_water_layer_1-hourly',
                 query,
-                date
+                date,
+                stage
               ) ? (
                 <Badge bg='primary'>{LOCALES.floodWarning[language]}</Badge>
               ) : null
@@ -237,8 +240,8 @@ function Dashboard({ query }) {
   }, [isMounted]);
 
   useEffect(() => {
-    matchMedia('(max-width: 576px)').onchange = refreshMediaCallback;
-    matchMedia('(max-width: 768px)').onchange = refreshMediaCallback;
+    matchMedia('(max-width: 576px)').addEventListener('change', refreshMediaCallback);
+    matchMedia('(max-width: 768px)').addEventListener('change', refreshMediaCallback);
     dispatch(
       fetchDClimateData(COORDINATES[query], 'cpcc_temp_max-daily'),
       fetchDClimateData(COORDINATES[query], 'cpcc_temp_min-daily'),
@@ -261,15 +264,15 @@ function Dashboard({ query }) {
         '',
         '?q=' + encodeURIComponent(query) + '&date=' + formatDate(date)
       );
-      setTempDestroy(true);
+      setTemporaryDestroy(true);
     }
   }, [date]);
 
   useEffect(() => {
-    if (tempDestroy === true) {
-      setTempDestroy(false);
+    if (temporaryDestroy === true) {
+      setTemporaryDestroy(false);
     }
-  }, [tempDestroy]);
+  }, [temporaryDestroy]);
 
   return (
     <div id='dashboard'>
@@ -297,7 +300,7 @@ function Dashboard({ query }) {
         </Button>
       </InputGroup>
 
-      {tempDestroy ? null : Object.keys(textData).length === 0 ? (
+      {temporaryDestroy ? null : (Object.keys(textData).length === 0 ? (
         <div
           data-aos='fade-up'
           className='position-absolute top-50 start-50 text-nowrap'
@@ -354,16 +357,16 @@ function Dashboard({ query }) {
                   size={
                     matchMedia('(max-width: 576px)').matches
                       ? 'small'
-                      : matchMedia('(max-width: 768px)').matches
+                      : (matchMedia('(max-width: 768px)').matches
                       ? 'normal'
-                      : 'large'
+                      : 'large')
                   }
                   height={
                     matchMedia('(max-width: 576px)').matches
                       ? '200'
-                      : matchMedia('(max-width: 768px)').matches
+                      : (matchMedia('(max-width: 768px)').matches
                       ? '250'
-                      : '300'
+                      : '300')
                   }
                   minTempLabel={LOCALES.low[language]}
                   averageTempLabel={LOCALES.average[language]}
@@ -389,19 +392,26 @@ function Dashboard({ query }) {
               <Row id='progress-ring-row' className='part-border'>
                 <ProgressRing
                   label={LOCALES.chanceOfRain[language]}
-                  valueEnd={parseFloat(textData['chance of rain'].slice(0, -1))}
+                  valueEnd={Number.parseFloat(
+                    textData['chance of rain'].slice(0, -1),
+                    10
+                  )}
                 />
                 <ProgressRing
                   label={LOCALES.humidity[language]}
-                  valueEnd={parseFloat(textData.humidity.slice(0, -1))}
+                  valueEnd={Number.parseFloat(textData.humidity.slice(0, -1), 10)}
                 />
               </Row>
             </Col>
           </Row>
         </Container>
-      )}
+      ))}
     </div>
   );
 }
+
+Dashboard.propTypes = {
+  query: PropTypes.string.isRequired
+};
 
 export default Dashboard;

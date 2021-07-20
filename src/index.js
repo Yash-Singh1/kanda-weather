@@ -22,7 +22,7 @@ render(
       </Switch>
     </BrowserRouter>
   </Provider>,
-  document.getElementById('root'),
+  document.querySelector('#root'),
   () => {
     AOS.init();
 

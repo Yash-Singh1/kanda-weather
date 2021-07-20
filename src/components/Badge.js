@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function Badge({ children, bg }) {
   return (
@@ -7,5 +8,10 @@ function Badge({ children, bg }) {
     </span>
   );
 }
+
+Badge.propTypes = {
+  children: PropTypes.node,
+  bg: PropTypes.string.isRequired
+};
 
 export default Badge;

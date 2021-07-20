@@ -1,6 +1,6 @@
 const COORDINATES = {
-  'Uyo, NG': [5.0405866, 7.9194225],
-  'Accra, GH': [5.6901705, -0.2099204]
+  'Uyo, NG': [5.040_586_6, 7.919_422_5],
+  'Accra, GH': [5.690_170_5, -0.209_920_4]
 };
 
 export default COORDINATES;

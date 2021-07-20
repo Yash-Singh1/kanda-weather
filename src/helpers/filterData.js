@@ -2,11 +2,11 @@ import formatDate from './formatDate';
 
 function filterData(data, query, date) {
   return data
-    ? data.filter((datapoint) =>
+    ? data.find((datapoint) =>
         datapoint.startsWith(
           `${decodeURIComponent(query)}: ${formatDate(date)}`
         )
-      )[0]
+      )
     : null;
 }
 

@@ -1,9 +1,9 @@
 import months from '../data/months';
 
-function formatDate(dateParam) {
+function formatDate(dateParameter) {
   return `${
-    months[dateParam.getMonth()]
-  } ${dateParam.getDate()}, ${dateParam.getFullYear()}`;
+    months[dateParameter.getMonth()]
+  } ${dateParameter.getDate()}, ${dateParameter.getFullYear()}`;
 }
 
 export default formatDate;

@@ -1,10 +1,27 @@
 /* Modified version of react-thermometer-component */
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import '../styles/Thermometer.css';
 
 class Thermometer extends Component {
+  static propTypes = {
+    theme: PropTypes.oneOf(['light', 'dark']),
+    value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    minTemp: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    maxTemp: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    max: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    steps: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    size: PropTypes.oneOf(['small', 'normal', 'large']),
+    format: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    height: PropTypes.number,
+    reverseGradient: PropTypes.bool,
+    averageTempLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    minTempLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    maxTempLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+  };
+
   render() {
     this.options = this._generateOptions();
     const theme = `thermometer--theme-${this.options.theme()}`;
@@ -76,7 +93,7 @@ class Thermometer extends Component {
         this.props.size === 'large'
           ? this.props.size
           : 'normal',
-      height: this.props.height || 200, //default 200
+      height: this.props.height || 200, // default 200
       valstr: () => this.options.value + this.options.format,
       minstr: () => this.options.minTemp + this.options.format,
       maxstr: () => this.options.maxTemp + this.options.format,
@@ -94,18 +111,18 @@ class Thermometer extends Component {
   _createIntervals() {
     if (this.options.steps) {
       for (let step = 0; step <= this.options.steps; step++) {
-        let val = ((this.options.max / this.options.steps) * step).toFixed(2);
-        let percent = (val / this.options.max) * 100;
-        let interval = { percent: percent, label: val + this.options.format };
+        let value = ((this.options.max / this.options.steps) * step).toFixed(2);
+        let percent = (value / this.options.max) * 100;
+        let interval = { percent: percent, label: value + this.options.format };
         this.options.intervals.push(interval);
       }
     }
   }
 
   _createIntervalsUI(intervals) {
-    return intervals.map((step, i) => {
+    return intervals.map((step, index) => {
       return (
-        <li key={i} style={{ bottom: `calc(${step.percent}% - 1px)` }}>
+        <li key={index} style={{ bottom: `calc(${step.percent}% - 1px)` }}>
           {step.label}
         </li>
       );
