@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://api.dclimate.net/apiv2/:path*"
+    },
+    {
+      "source": "/api/:path*/",
+      "destination": "https://api.dclimate.net/apiv2/:path*/"
+    }
+  ]
+}
