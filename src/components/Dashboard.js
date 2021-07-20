@@ -160,40 +160,22 @@ function Dashboard({ query }) {
               ) : null
             ) : null
           ) : null}
-          {dclimateData[
+          {(dclimateData[
             generateLocalStorageKey(
               'era5_land_wind_u-hourly',
               COORDINATES[query]
             )
           ] &&
-          dclimateData[
-            generateLocalStorageKey(
-              'era5_land_wind_v-hourly',
-              COORDINATES[query]
-            )
-          ] &&
-          (!(
             dclimateData[
               generateLocalStorageKey(
                 'era5_land_wind_v-hourly',
                 COORDINATES[query]
               )
-            ].filter((windVComp) =>
-              [
-                dashFormatDate(
-                  new Date(new Date(date.getTime()).setDate(date.getDate() - 2))
-                ),
-                dashFormatDate(
-                  new Date(new Date(date.getTime()).setDate(date.getDate() - 1))
-                ),
-                dashFormatDate(date)
-              ].includes(windVComp.split(' ')[0])
-            ).length > 2
-          ) ||
+            ] &&
             !(
               dclimateData[
                 generateLocalStorageKey(
-                  'era5_land_wind_u-hourly',
+                  'era5_land_wind_v-hourly',
                   COORDINATES[query]
                 )
               ].filter((windVComp) =>
@@ -211,9 +193,26 @@ function Dashboard({ query }) {
                   dashFormatDate(date)
                 ].includes(windVComp.split(' ')[0])
               ).length > 2
-            )) &&
-          foggy &&
-          textData.condition === 'Cloudy' ? (
+            )) ||
+          (!(
+            dclimateData[
+              generateLocalStorageKey(
+                'era5_land_wind_u-hourly',
+                COORDINATES[query]
+              )
+            ].filter((windVComp) =>
+              [
+                dashFormatDate(
+                  new Date(new Date(date.getTime()).setDate(date.getDate() - 2))
+                ),
+                dashFormatDate(
+                  new Date(new Date(date.getTime()).setDate(date.getDate() - 1))
+                ),
+                dashFormatDate(date)
+              ].includes(windVComp.split(' ')[0])
+            ).length > 2
+          ) &&
+            !raining) ? (
             <Badge bg='secondary'>Poor Air Quality</Badge>
           ) : null}
         </Col>
