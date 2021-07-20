@@ -192,6 +192,18 @@ const LOCALES = {
     French: "Risque d'inondation",
     Yoruba: 'Ewu Ekun omi',
     Swahili: 'Onyo la Mafuriko'
+  },
+  poorAirQuality: {
+    English: 'Poor Air Quality',
+    French: "Mauvaise qualité de l'air",
+    Yoruba: 'Didara Afẹfẹ ti ko dara',
+    Swahili: 'Hewa duni'
+  },
+  extremeAirQuality: {
+    English: 'Extreme Air Quality',
+    French: "Qualité de l'air extrême",
+    Yoruba: 'Iwọn Didara Afẹfẹ',
+    Swahili: 'Ubora wa Hewa uliokithiri'
   }
 };
 

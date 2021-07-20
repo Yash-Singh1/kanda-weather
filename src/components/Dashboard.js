@@ -63,7 +63,8 @@ function Dashboard({ query }) {
         Number.parseFloat(textData['chance of rain'].slice(0, -1), 10) >=
         RAINING_MIN_CHANCE;
       const foggy =
-        Number.parseFloat(textData.humidity.slice(0, -1), 10) >= FOGGY_MIN_HUMIDITY;
+        Number.parseFloat(textData.humidity.slice(0, -1), 10) >=
+        FOGGY_MIN_HUMIDITY;
 
       return (
         <Col
@@ -80,7 +81,7 @@ function Dashboard({ query }) {
                   (stage === 'Morning' || stage === 'Afternoon'
                     ? 'day-sunny'
                     : 'night-clear')
-                : (textData.condition === 'Cloudy'
+                : textData.condition === 'Cloudy'
                 ? raining
                   ? 'wi-' +
                     (stage === 'Morning' || stage === 'Afternoon'
@@ -111,16 +112,16 @@ function Dashboard({ query }) {
                       : (stage === 'Morning' || stage === 'Afternoon'
                           ? ''
                           : '-partly') + '-cloudy')
-                : '')
+                : ''
             } font-size-50`}
           ></i>
           <br />
           <span className='text-nowrap'>
             {textData.condition === 'Sunny'
-              ? (stage === 'Morning' || stage === 'Afternoon'
+              ? stage === 'Morning' || stage === 'Afternoon'
                 ? LOCALES.sunny[language]
-                : LOCALES.clear[language])
-              : (foggy
+                : LOCALES.clear[language]
+              : foggy
               ? LOCALES.foggy[language]
               : raining
               ? LOCALES.rain[language]
@@ -130,7 +131,7 @@ function Dashboard({ query }) {
               ? LOCALES.cloudy[language]
               : textData.condition === 'Partly Cloudy'
               ? LOCALES.partlyCloudy[language]
-              : '')}
+              : ''}
           </span>
           <br />
           {dclimateData[
@@ -221,8 +222,9 @@ function Dashboard({ query }) {
             MIN_HOURS_TO_CLEAR_POLLUTION &&
           !raining ? (
             <Badge bg='secondary'>
-              {foggy || textData.condition === 'Cloudy' ? 'Extreme' : 'Poor'}{' '}
-              Air Quality
+              {foggy || textData.condition === 'Cloudy'
+                ? LOCALES.extremeAirQuality[language]
+                : LOCALES.poorAirQuality[language]}
             </Badge>
           ) : null}
         </Col>
@@ -240,8 +242,14 @@ function Dashboard({ query }) {
   }, [isMounted]);
 
   useEffect(() => {
-    matchMedia('(max-width: 576px)').addEventListener('change', refreshMediaCallback);
-    matchMedia('(max-width: 768px)').addEventListener('change', refreshMediaCallback);
+    matchMedia('(max-width: 576px)').addEventListener(
+      'change',
+      refreshMediaCallback
+    );
+    matchMedia('(max-width: 768px)').addEventListener(
+      'change',
+      refreshMediaCallback
+    );
     dispatch(
       fetchDClimateData(COORDINATES[query], 'cpcc_temp_max-daily'),
       fetchDClimateData(COORDINATES[query], 'cpcc_temp_min-daily'),
@@ -300,7 +308,7 @@ function Dashboard({ query }) {
         </Button>
       </InputGroup>
 
-      {temporaryDestroy ? null : (Object.keys(textData).length === 0 ? (
+      {temporaryDestroy ? null : Object.keys(textData).length === 0 ? (
         <div
           data-aos='fade-up'
           className='position-absolute top-50 start-50 text-nowrap'
@@ -357,16 +365,16 @@ function Dashboard({ query }) {
                   size={
                     matchMedia('(max-width: 576px)').matches
                       ? 'small'
-                      : (matchMedia('(max-width: 768px)').matches
+                      : matchMedia('(max-width: 768px)').matches
                       ? 'normal'
-                      : 'large')
+                      : 'large'
                   }
                   height={
                     matchMedia('(max-width: 576px)').matches
                       ? '200'
-                      : (matchMedia('(max-width: 768px)').matches
+                      : matchMedia('(max-width: 768px)').matches
                       ? '250'
-                      : '300')
+                      : '300'
                   }
                   minTempLabel={LOCALES.low[language]}
                   averageTempLabel={LOCALES.average[language]}
@@ -399,13 +407,16 @@ function Dashboard({ query }) {
                 />
                 <ProgressRing
                   label={LOCALES.humidity[language]}
-                  valueEnd={Number.parseFloat(textData.humidity.slice(0, -1), 10)}
+                  valueEnd={Number.parseFloat(
+                    textData.humidity.slice(0, -1),
+                    10
+                  )}
                 />
               </Row>
             </Col>
           </Row>
         </Container>
-      ))}
+      )}
     </div>
   );
 }
