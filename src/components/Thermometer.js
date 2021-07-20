@@ -15,7 +15,7 @@ class Thermometer extends Component {
     steps: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     size: PropTypes.oneOf(['small', 'normal', 'large']),
     format: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    height: PropTypes.number,
+    height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     reverseGradient: PropTypes.bool,
     averageTempLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     minTempLabel: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
