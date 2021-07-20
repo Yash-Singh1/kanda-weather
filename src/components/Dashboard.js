@@ -27,6 +27,13 @@ import Badge from './Badge';
 import findHour from '../helpers/findHour';
 import ProgressRing from './ProgressRing';
 import { useIsMounted, useRefresh } from 'react-tidy';
+import {
+  FOGGY_MIN_HUMIDITY,
+  HEAT_ADVISORY_CELSIUS_TEMP,
+  MIN_HOURS_TO_CLEAR_POLLUTION,
+  RAINING_MIN_CHANCE,
+  WINDY_MIN_SPEED
+} from '../data/magicNumbers';
 
 function Dashboard({ query }) {
   let [tempDestroy, setTempDestroy] = useState(false);
@@ -49,9 +56,13 @@ function Dashboard({ query }) {
     (stage, index) => {
       const windy =
         textData.wind !== 'Unknown' &&
-        parseFloat(textData.wind.split(' at ')[1].split(' ')[0]) >= 20;
-      const raining = parseFloat(textData['chance of rain'].slice(0, -1)) >= 60;
-      const foggy = parseFloat(textData.humidity.slice(0, -1)) >= 95;
+        parseFloat(textData.wind.split(' at ')[1].split(' ')[0]) >=
+          WINDY_MIN_SPEED;
+      const raining =
+        parseFloat(textData['chance of rain'].slice(0, -1)) >=
+        RAINING_MIN_CHANCE;
+      const foggy =
+        parseFloat(textData.humidity.slice(0, -1)) >= FOGGY_MIN_HUMIDITY;
 
       return (
         <Col
@@ -125,7 +136,7 @@ function Dashboard({ query }) {
             generateLocalStorageKey('cpcc_temp_max-daily', COORDINATES[query])
           ] ? (
             extractDClimateDataTemperature(dclimateData, date, query, 'max') >
-            40.5556 ? (
+            HEAT_ADVISORY_CELSIUS_TEMP ? (
               <Badge bg='warning'>{LOCALES.heatAdvisory[language]}</Badge>
             ) : null
           ) : null}
@@ -160,41 +171,34 @@ function Dashboard({ query }) {
               ) : null
             ) : null
           ) : null}
-          {(dclimateData[
+          {dclimateData[
             generateLocalStorageKey(
               'era5_land_wind_u-hourly',
               COORDINATES[query]
             )
           ] &&
-            dclimateData[
-              generateLocalStorageKey(
-                'era5_land_wind_v-hourly',
-                COORDINATES[query]
-              )
-            ] &&
-            !(
-              dclimateData[
-                generateLocalStorageKey(
-                  'era5_land_wind_v-hourly',
-                  COORDINATES[query]
-                )
-              ].filter((windVComp) =>
-                [
-                  dashFormatDate(
-                    new Date(
-                      new Date(date.getTime()).setDate(date.getDate() - 2)
-                    )
-                  ),
-                  dashFormatDate(
-                    new Date(
-                      new Date(date.getTime()).setDate(date.getDate() - 1)
-                    )
-                  ),
-                  dashFormatDate(date)
-                ].includes(windVComp.split(' ')[0])
-              ).length > 2
-            )) ||
-          (!(
+          dclimateData[
+            generateLocalStorageKey(
+              'era5_land_wind_v-hourly',
+              COORDINATES[query]
+            )
+          ] &&
+          dclimateData[
+            generateLocalStorageKey(
+              'era5_land_wind_v-hourly',
+              COORDINATES[query]
+            )
+          ].filter((windVComp) =>
+            [
+              dashFormatDate(
+                new Date(new Date(date.getTime()).setDate(date.getDate() - 2))
+              ),
+              dashFormatDate(
+                new Date(new Date(date.getTime()).setDate(date.getDate() - 1))
+              ),
+              dashFormatDate(date)
+            ].includes(windVComp.split(' ')[0])
+          ).length +
             dclimateData[
               generateLocalStorageKey(
                 'era5_land_wind_u-hourly',
@@ -210,10 +214,13 @@ function Dashboard({ query }) {
                 ),
                 dashFormatDate(date)
               ].includes(windVComp.split(' ')[0])
-            ).length > 2
-          ) &&
-            !raining) ? (
-            <Badge bg='secondary'>Poor Air Quality</Badge>
+            ).length <=
+            MIN_HOURS_TO_CLEAR_POLLUTION &&
+          !raining ? (
+            <Badge bg='secondary'>
+              {foggy || textData.condition === 'Cloudy' ? 'Extreme' : 'Poor'}{' '}
+              Air Quality
+            </Badge>
           ) : null}
         </Col>
       );
