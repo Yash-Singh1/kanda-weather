@@ -16,7 +16,7 @@ import parseHeaders from 'parse-headers';
 import patchQuestionIcon from 'url:bootstrap-icons/icons/patch-question.svg';
 import { fetchDClimateData, setDate } from '../actions';
 import 'react-circular-progressbar/dist/styles.css';
-import Thermometer from './Thermometer';
+import Thermometer from 'react-thermometer-range-component';
 import COORDINATES from '../data/latlon';
 import dashFormatDate from '../helpers/dashFormatDate';
 import extractDClimateDataTemperature from '../helpers/extractDClimateDataTemperature';
