@@ -35,6 +35,7 @@ import {
   WINDY_MIN_SPEED
 } from '../data/magicNumbers';
 import PropTypes from 'prop-types';
+import Loader from './Loader';
 
 function Dashboard({ query }) {
   let [temporaryDestroy, setTemporaryDestroy] = useState(false);
@@ -142,52 +143,24 @@ function Dashboard({ query }) {
               <Badge bg='warning'>{LOCALES.heatAdvisory[language]}</Badge>
             ) : null
           ) : null}
-          {raining ? (
-            dclimateData[
-              generateLocalStorageKey(
-                'era5_surface_runoff-hourly',
-                COORDINATES[query]
-              )
-            ] ? (
-              findHour(
-                dclimateData,
-                'era5_surface_runoff-hourly',
-                query,
-                date,
-                stage
-              ) ? (
-                <Badge bg='primary'>{LOCALES.floodWarning[language]}</Badge>
-              ) : null
-            ) : dclimateData[
-                generateLocalStorageKey(
-                  'era5_volumetric_soil_water_layer_1-hourly',
-                  COORDINATES[query]
-                )
-              ] ? (
-              findHour(
-                dclimateData,
-                'era5_volumetric_soil_water_layer_1-hourly',
-                query,
-                date,
-                stage
-              ) ? (
-                <Badge bg='primary'>{LOCALES.floodWarning[language]}</Badge>
-              ) : null
-            ) : null
+          {raining &&
+          (findHour(
+            dclimateData,
+            'era5_volumetric_soil_water_layer_1-hourly',
+            query,
+            date,
+            stage
+          ) ||
+            findHour(
+              dclimateData,
+              'era5_surface_runoff-hourly',
+              query,
+              date,
+              stage
+            )) ? (
+            <Badge bg='primary'>{LOCALES.floodWarning[language]}</Badge>
           ) : null}
           {dclimateData[
-            generateLocalStorageKey(
-              'era5_land_wind_u-hourly',
-              COORDINATES[query]
-            )
-          ] &&
-          dclimateData[
-            generateLocalStorageKey(
-              'era5_land_wind_v-hourly',
-              COORDINATES[query]
-            )
-          ] &&
-          dclimateData[
             generateLocalStorageKey(
               'era5_land_wind_v-hourly',
               COORDINATES[query]
@@ -219,8 +192,7 @@ function Dashboard({ query }) {
                 dashFormatDate(date)
               ].includes(windVComp.split(' ')[0])
             ).length <=
-            MIN_HOURS_TO_CLEAR_POLLUTION &&
-          !raining ? (
+            MIN_HOURS_TO_CLEAR_POLLUTION && !raining ? (
             <Badge bg='secondary'>
               {foggy || textData.condition === 'Cloudy'
                 ? LOCALES.extremeAirQuality[language]
@@ -251,15 +223,15 @@ function Dashboard({ query }) {
       refreshMediaCallback
     );
     dispatch(
-      fetchDClimateData(COORDINATES[query], 'cpcc_temp_max-daily'),
-      fetchDClimateData(COORDINATES[query], 'cpcc_temp_min-daily'),
       fetchDClimateData(COORDINATES[query], 'era5_surface_runoff-hourly'),
       fetchDClimateData(
         COORDINATES[query],
         'era5_volumetric_soil_water_layer_1-hourly'
       ),
       fetchDClimateData(COORDINATES[query], 'era5_land_wind_u-hourly'),
-      fetchDClimateData(COORDINATES[query], 'era5_land_wind_v-hourly')
+      fetchDClimateData(COORDINATES[query], 'era5_land_wind_v-hourly'),
+      fetchDClimateData(COORDINATES[query], 'cpcc_temp_max-daily'),
+      fetchDClimateData(COORDINATES[query], 'cpcc_temp_min-daily')
     );
   }, []);
 
@@ -308,7 +280,27 @@ function Dashboard({ query }) {
         </Button>
       </InputGroup>
 
-      {temporaryDestroy ? null : Object.keys(textData).length === 0 ? (
+      {temporaryDestroy ||
+      !dclimateData[
+        generateLocalStorageKey('era5_land_wind_u-hourly', COORDINATES[query])
+      ] ||
+      !dclimateData[
+        generateLocalStorageKey('era5_land_wind_v-hourly', COORDINATES[query])
+      ] ||
+      !dclimateData[
+        generateLocalStorageKey(
+          'era5_surface_runoff-hourly',
+          COORDINATES[query]
+        )
+      ] ||
+      !dclimateData[
+        generateLocalStorageKey(
+          'era5_volumetric_soil_water_layer_1-hourly',
+          COORDINATES[query]
+        )
+      ] ? (
+        <Loader center />
+      ) : Object.keys(textData).length === 0 ? (
         <div
           data-aos='fade-up'
           className='position-absolute top-50 start-50 text-nowrap'
@@ -381,7 +373,7 @@ function Dashboard({ query }) {
                   maxTempLabel={LOCALES.high[language]}
                 />
               ) : (
-                <span className='loader'></span>
+                <Loader />
               )}
             </Col>
             <Col md={9} sm={8} xs={12}>
