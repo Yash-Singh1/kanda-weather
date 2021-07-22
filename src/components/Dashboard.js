@@ -280,27 +280,7 @@ function Dashboard({ query }) {
         </Button>
       </InputGroup>
 
-      {temporaryDestroy ||
-      !dclimateData[
-        generateLocalStorageKey('era5_land_wind_u-hourly', COORDINATES[query])
-      ] ||
-      !dclimateData[
-        generateLocalStorageKey('era5_land_wind_v-hourly', COORDINATES[query])
-      ] ||
-      !dclimateData[
-        generateLocalStorageKey(
-          'era5_surface_runoff-hourly',
-          COORDINATES[query]
-        )
-      ] ||
-      !dclimateData[
-        generateLocalStorageKey(
-          'era5_volumetric_soil_water_layer_1-hourly',
-          COORDINATES[query]
-        )
-      ] ? (
-        <Loader center />
-      ) : Object.keys(textData).length === 0 ? (
+      {Object.keys(textData).length === 0 ? (
         <div
           data-aos='fade-up'
           className='position-absolute top-50 start-50 text-nowrap'
@@ -314,6 +294,26 @@ function Dashboard({ query }) {
           <br />
           <span>{LOCALES.noData[language]}</span>
         </div>
+      ) : temporaryDestroy ||
+        !dclimateData[
+          generateLocalStorageKey('era5_land_wind_u-hourly', COORDINATES[query])
+        ] ||
+        !dclimateData[
+          generateLocalStorageKey('era5_land_wind_v-hourly', COORDINATES[query])
+        ] ||
+        !dclimateData[
+          generateLocalStorageKey(
+            'era5_surface_runoff-hourly',
+            COORDINATES[query]
+          )
+        ] ||
+        !dclimateData[
+          generateLocalStorageKey(
+            'era5_volumetric_soil_water_layer_1-hourly',
+            COORDINATES[query]
+          )
+        ] ? (
+        <Loader center />
       ) : (
         <Container fluid data-aos='fade-up'>
           <Row>
