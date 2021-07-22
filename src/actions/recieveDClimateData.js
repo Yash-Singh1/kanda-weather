@@ -51,7 +51,7 @@ export function fetchDClimateData(latlon, dataset) {
               localStorage.setItem(
                 generateLocalStorageKey(dataset, latlon) + '-cache',
                 dataset.endsWith('-hourly')
-                  ? dataJSON.data
+                  ? dataJSON.data.split(',')
                   : JSON.stringify(dataJSON.data)
               );
               dispatch(recieveDClimateData(dataJSON, latlon, dataset));
