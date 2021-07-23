@@ -4,6 +4,7 @@ import App from './components/App';
 import Settings from './components/Settings';
 import './styles/index.css';
 import { applyMiddleware, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
@@ -11,7 +12,10 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import thunk from 'redux-thunk';
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
 
 render(
   <Provider store={store}>

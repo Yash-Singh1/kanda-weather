@@ -43,6 +43,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-unicorn": "^34.0.1",
     "live-server": "^1.2.1",
-    "parcel": "^2.0.0-beta.3"
+    "parcel": "^2.0.0-beta.3",
+    "redux-devtools-extension": "^2.13.9"
   }
 }
