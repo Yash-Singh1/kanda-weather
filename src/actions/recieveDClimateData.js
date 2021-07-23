@@ -42,6 +42,9 @@ export function fetchDClimateData(latlon, dataset) {
                   dataJSON.data = processWind(dataJSON.data);
                   break;
               }
+              if (dataset.endsWith('-hourly')) {
+                dataJSON.data = dataJSON.data.split(',');
+              }
               localStorage.setItem(
                 generateLocalStorageKey(dataset, latlon) + '-cache-version',
                 json['time last generated']
@@ -51,7 +54,7 @@ export function fetchDClimateData(latlon, dataset) {
               localStorage.setItem(
                 generateLocalStorageKey(dataset, latlon) + '-cache',
                 dataset.endsWith('-hourly')
-                  ? dataJSON.data.split(',')
+                  ? dataJSON.data
                   : JSON.stringify(dataJSON.data)
               );
               dispatch(recieveDClimateData(dataJSON, latlon, dataset));
@@ -60,8 +63,12 @@ export function fetchDClimateData(latlon, dataset) {
           dispatch(
             recieveDClimateData(
               {
-                data: dataset.endsWith('hourly')
-                  ? dataset.split(',')
+                data: dataset.endsWith('-hourly')
+                  ? localStorage
+                      .getItem(
+                        generateLocalStorageKey(dataset, latlon) + '-cache'
+                      )
+                      .split(',')
                   : JSON.parse(
                       localStorage.getItem(
                         generateLocalStorageKey(dataset, latlon) + '-cache'
