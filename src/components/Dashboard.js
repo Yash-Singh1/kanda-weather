@@ -30,7 +30,7 @@ import { useIsMounted, useRefresh } from 'react-tidy';
 import {
   FOGGY_MIN_HUMIDITY,
   HEAT_ADVISORY_CELSIUS_TEMP,
-  MIN_HOURS_TO_CLEAR_POLLUTION,
+  MIN_DAYS_TO_CLEAR_POLLUTION,
   RAINING_MIN_CHANCE,
   WINDY_MIN_SPEED
 } from '../data/magicNumbers';
@@ -192,7 +192,7 @@ function Dashboard({ query }) {
                 dashFormatDate(date)
               ].includes(windVComp.split(' ')[0])
             ).length <=
-            MIN_HOURS_TO_CLEAR_POLLUTION && !raining ? (
+            MIN_DAYS_TO_CLEAR_POLLUTION && !raining ? (
             <Badge bg='secondary'>
               {foggy || textData.condition === 'Cloudy'
                 ? LOCALES.extremeAirQuality[language]

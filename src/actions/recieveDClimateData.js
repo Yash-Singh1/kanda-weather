@@ -23,8 +23,11 @@ export function fetchDClimateData(latlon, dataset) {
           (json['time last generated']
             ? json['time last generated']
             : json['time generated']) !==
-          localStorage.getItem(
-            generateLocalStorageKey(dataset, latlon) + '-cache-version'
+            localStorage.getItem(
+              generateLocalStorageKey(dataset, latlon) + '-cache-version'
+            ) ||
+          !localStorage.getItem(
+            generateLocalStorageKey(dataset, latlon) + '-cache'
           )
         ) {
           fetch('/api/grid-history/' + dataset + '/' + latlon.join('_'))
@@ -51,12 +54,15 @@ export function fetchDClimateData(latlon, dataset) {
                   ? json['time last generated']
                   : json['time generated']
               );
-              localStorage.setItem(
-                generateLocalStorageKey(dataset, latlon) + '-cache',
-                dataset.endsWith('-hourly')
-                  ? dataJSON.data
-                  : JSON.stringify(dataJSON.data)
-              );
+              try {
+                localStorage.setItem(
+                  generateLocalStorageKey(dataset, latlon) + '-cache',
+                  dataset.endsWith('-hourly')
+                    ? dataJSON.data
+                    : JSON.stringify(dataJSON.data)
+                );
+                // eslint-disable-next-line no-empty
+              } catch {}
               dispatch(recieveDClimateData(dataJSON, latlon, dataset));
             });
         } else {
