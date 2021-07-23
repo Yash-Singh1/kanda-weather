@@ -194,16 +194,16 @@ const LOCALES = {
     Swahili: 'Onyo la Mafuriko'
   },
   poorAirQuality: {
-    English: 'Poor Air Quality',
-    French: "Mauvaise qualité de l'air",
-    Yoruba: 'Didara Afẹfẹ ti ko dara',
-    Swahili: 'Hewa duni'
+    English: 'Air Quality - Poor',
+    French: "Qualité de l'air - Mauvaise",
+    Yoruba: 'Didara Afẹfẹ - Alaini',
+    Swahili: 'Ubora wa Hewa - Maskini'
   },
-  extremeAirQuality: {
-    English: 'Extreme Air Quality',
-    French: "Qualité de l'air extrême",
-    Yoruba: 'Iwọn Didara Afẹfẹ',
-    Swahili: 'Ubora wa Hewa uliokithiri'
+  hazardousAirQuality: {
+    English: 'Air Quality - Hazardous',
+    French: "Qualité de l'air - Dangereux",
+    Yoruba: 'Didara Afẹfẹ - Ipalara',
+    Swahili: 'Ubora wa Hewa - Hatari'
   }
 };
 

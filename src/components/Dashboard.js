@@ -195,7 +195,7 @@ function Dashboard({ query }) {
             MIN_DAYS_TO_CLEAR_POLLUTION && !raining ? (
             <Badge bg='secondary'>
               {foggy || textData.condition === 'Cloudy'
-                ? LOCALES.extremeAirQuality[language]
+                ? LOCALES.hazardousAirQuality[language]
                 : LOCALES.poorAirQuality[language]}
             </Badge>
           ) : null}
