@@ -8,7 +8,7 @@ import {
   Col
 } from 'react-bootstrap';
 import formatDate from '../helpers/formatDate';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import 'weathericons/css/weather-icons.min.css';
 import LOCALES from '../data/localization';
 import filterData from '../helpers/filterData';
@@ -20,7 +20,6 @@ import Thermometer from 'react-thermometer-range-component';
 import COORDINATES from '../data/latlon';
 import dashFormatDate from '../helpers/dashFormatDate';
 import extractDClimateDataTemperature from '../helpers/extractDClimateDataTemperature';
-import dispatchMultiple from '../helpers/dispatchMultiple';
 import generateLocalStorageKey from '../helpers/generateLocalStorageKey';
 import '../styles/Loader.css';
 import Badge from './Badge';
@@ -36,6 +35,7 @@ import {
 } from '../data/magicNumbers';
 import PropTypes from 'prop-types';
 import Loader from './Loader';
+import useDispatchMultiple from 'react-use-dispatch-multiple';
 
 function Dashboard({ query }) {
   let [temporaryDestroy, setTemporaryDestroy] = useState(false);
@@ -207,7 +207,7 @@ function Dashboard({ query }) {
 
   const isMounted = useIsMounted();
 
-  const dispatch = dispatchMultiple(useDispatch(), isMounted);
+  const dispatch = useDispatchMultiple();
 
   const refreshMediaCallback = useCallback(() => {
     if (isMounted()) refresh();
@@ -352,7 +352,7 @@ function Dashboard({ query }) {
                     'max'
                   )}
                   max='50'
-                  steps='3'
+                  steps={3}
                   format='°C'
                   size={
                     matchMedia('(max-width: 576px)').matches
