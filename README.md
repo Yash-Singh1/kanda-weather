@@ -24,17 +24,12 @@ npm run dev
 
 ## Troubleshooting
 
-I have zero idea why this happens (probably a bug on `parcel`'s end),
-but the CORS sent by `parcel` sometimes mess up in different
-operating systems and times. If there are stylistic issues when loading
+I have zero idea why this happens (probably a bug on `npm`'s end),
+but the CORS sent by `parcel` sometimes mess up because `npm`
+installs `parcel@2.0.0-nightly.792` instead of `parcel@2.0.0-beta.3.1`.
+If there are stylistic issues when loading
 the webpage, try running:
 
 ```sh
 npm install parcel@2.0.0-beta.3.1
-```
-
-If that doesn't work try:
-
-```sh
-npm install parcel@2.0.0-beta.3
 ```
