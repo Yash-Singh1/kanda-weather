@@ -4,6 +4,12 @@ Weather dashboard for the Kanda Hackathon.
 
 ## Usage
 
+First, run:
+
+```sh
+npm install && npm install parcel@2.0.0-beta.3.1
+```
+
 To build into the `dist/` directory, run:
 
 ```sh
