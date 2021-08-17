@@ -39,3 +39,11 @@ the webpage, try running:
 ```sh
 npm install parcel@2.0.0-beta.3.1
 ```
+
+This error doesn't occur in production, because the CORS problems do
+not occur when hosting from other deployment platforms.
+
+## Architecture
+
+For more information on how this application was built, see the architecture
+notes: [ARCHITECTURE.md](./ARCHITECTURE.md).
