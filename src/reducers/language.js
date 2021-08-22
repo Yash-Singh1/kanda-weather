@@ -17,8 +17,8 @@ function language(
       break;
   }
 
-  if (document.lastChild.lang !== LANGUAGE_CODES[nextLanguage]) {
-    document.lastChild.lang = LANGUAGE_CODES[nextLanguage];
+  if (document.documentElement.lang !== LANGUAGE_CODES[nextLanguage]) {
+    document.documentElement.lang = LANGUAGE_CODES[nextLanguage];
   }
 
   return nextLanguage;
