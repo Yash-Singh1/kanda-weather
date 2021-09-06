@@ -2,6 +2,12 @@
 
 Weather dashboard for the Kanda Hackathon.
 
+## DEPRECATED
+
+> V2 of the dClimate API is now deprecated and queued for removal in the next few weeks! V3 of the dClimate API can be found at api.dclimate.net/apiv3. Please note the API will require all users to register before accessing data. Register now using the registration endpoint at api.dclimate.net/apiv3/register.
+
+Due to the deprecation of the v2 API, authorization is now required, so this application won't work anymore.
+
 ## Usage
 
 First, run:
