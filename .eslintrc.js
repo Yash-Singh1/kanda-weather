@@ -14,7 +14,7 @@ module.exports = {
     sourceType: 'module',
     ecmaVersion: 6
   },
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   settings: {
     react: { version: 'detect' }
   },
